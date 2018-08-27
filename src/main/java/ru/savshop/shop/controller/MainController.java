@@ -58,7 +58,7 @@ public class MainController {
         modelMap.addAttribute("allPosts",postRepository.findByUserVerify());
         modelMap.addAttribute("four", postRepository.lastFour());
         modelMap.addAttribute("allCategories", categoryRepository.findAll());
-        List<Post> postList = postRepository.findPostsByTitleLike(search);
+        List<Post> postList = postRepository.findPostsByTitleLike(search.trim());
         if (search != null && postList.isEmpty()) {
             modelMap.addAttribute("mess", "Search Result with " + "' " + search + " '" + " not Found");
         } else {

@@ -83,7 +83,6 @@ public class PostController {
 
         post.setUser(userRepository.getOne(curretUser.getId()));
         post.setView(0);
-        post.setTitle("   "+post.getTitle()+"   ");
         postRepository.save(post);
         for (AttributeValue attributeValue : post.getAttributeValues()) {
             attributeValue.setPost(post);
