@@ -120,7 +120,7 @@ public class PostController {
         return "editPost";
     }
 
-    @RequestMapping(value = "/updatePost", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateUserPost", method = RequestMethod.POST)
     public String AddPost(@ModelAttribute(name = "post") Post post, @RequestParam(name = "value", required = false) List<Attributes> value,
                           @RequestParam(value = "picture") MultipartFile[] uploadingFiles
 

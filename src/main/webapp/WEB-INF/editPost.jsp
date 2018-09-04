@@ -115,9 +115,7 @@
             </ul></c:if>
         </div>
     </nav>
-    </nav>
-
-    <spring:form action="/updatePost" method="post" modelAttribute="post" enctype="multipart/form-data">
+    <spring:form action="/updateUserPost" method="post" modelAttribute="post" enctype="multipart/form-data">
         <div class="row content">
 
             <div class="col-lg-9 content-right">
