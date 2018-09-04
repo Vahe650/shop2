@@ -20,11 +20,13 @@ public class ExceptionController implements ErrorController {
         map.addAttribute("errorMessage", "You're not verified your account. \n Check your Email!!!");
         return "login";
     }
+
     @RequestMapping(value = "/inccorectError")
     public String incorrectError(ModelMap map) {
         map.addAttribute("errorMessage", "Login or password are entered incorrectly!\nTry again");
         return "login";
     }
+
     @RequestMapping(value = "/accessError")
     public String accesstError(ModelMap map) {
         map.addAttribute("errorMessage", "Sorry, you do not have permission to view this page.");
@@ -32,7 +34,7 @@ public class ExceptionController implements ErrorController {
 
     }
 
-//
+    //
 //    @RequestMapping(value = {"/{name:.+}", "/{name}/{name}"}, method = RequestMethod.GET)
 //    public String viewEdit(@PathVariable("name") final String name, ModelMap model) {
 //        if (name.equals("null"))
@@ -41,7 +43,7 @@ public class ExceptionController implements ErrorController {
 //        return "404";
 //    }
     @RequestMapping(value = "/error", method = RequestMethod.GET)
-    public String renderErrorPage(ModelMap map,HttpServletRequest httpRequest) {
+    public String renderErrorPage(ModelMap map, HttpServletRequest httpRequest) {
         String errorMsg = "";
         int httpErrorCode = getErrorCode(httpRequest);
         switch (httpErrorCode) {
@@ -62,22 +64,18 @@ public class ExceptionController implements ErrorController {
                 break;
             }
         }
-       map.addAttribute("msg",errorMsg);
-        return "404";
+            map.addAttribute("msg", errorMsg);
+      return "404";
     }
 
     private int getErrorCode(HttpServletRequest httpRequest) {
         return (Integer) httpRequest
                 .getAttribute("javax.servlet.error.status_code");
     }
-    @RequestMapping(value = "500Error", method = RequestMethod.GET)
-    public void throwRuntimeException() {
-        throw new NullPointerException("Throwing a null pointer exception");
-    }
+
 
     @RequestMapping("/error")
     public String handleError() {
-        //do something like logging
         return "404";
     }
 
