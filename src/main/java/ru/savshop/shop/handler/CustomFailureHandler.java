@@ -43,14 +43,9 @@ public class CustomFailureHandler extends SimpleUrlAuthenticationFailureHandler 
                 = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null) {
 
-        response.sendRedirect(request.getContextPath() + "/accessError");
-    }
-    }
-    @Controller
-    public class SpringExceptionExample {
-        @ExceptionHandler(ResourceNotFoundException.class)
-        public String handleResourceNotFoundException() {
-            return "404";
+            response.sendRedirect(request.getContextPath() + "/accessError");
         }
+    }
 
-    }}
+
+}

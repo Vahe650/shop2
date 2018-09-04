@@ -57,13 +57,13 @@ public class AdminController {
     public String addParrentCategoryAndAtribute(@ModelAttribute(name = "category") Category category,
                                                 @RequestParam("atribute") List<String> atributes) {
         categoryRepository.save(category);
-        List<Attributes> attributesList = new LinkedList<>();
+//        List<Attributes> attributesList = new LinkedList<>();
         for (String attribute : atributes) {
-            Attributes atributes1 = new Attributes();
-            atributes1.setCategory(category);
-            atributes1.setName(attribute);
-            attributeRepository.save(atributes1);
-            attributesList.add(atributes1);
+            Attributes categoryAttribute = new Attributes();
+            categoryAttribute.setCategory(category);
+            categoryAttribute.setName(attribute);
+            attributeRepository.save(categoryAttribute);
+//            attributesList.add(atributes1);
         }
         return "redirect:/admin";
     }
@@ -86,20 +86,18 @@ public class AdminController {
         userRepository.delete(id);
         return "redirect:/admin/searchUser";
     }
-
     @RequestMapping(value = "/admin/deletePost")
     public String del(@RequestParam("id") int id) {
         postRepository.delete(id);
         return "redirect:/admin/allUsers";
     }
-
     @RequestMapping(value = "/admin/searchUser", method = RequestMethod.GET)
     public String searchUser(ModelMap modelMap, @RequestParam(name = "search", required = false) String search, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
             modelMap.addAttribute("current", userRepository.findOne(currentUser.getId()));
         }
-        modelMap.addAttribute("allPosts",postRepository.findByUserVerify());
+        modelMap.addAttribute("allPosts", postRepository.findByUserVerify());
         modelMap.addAttribute("four", postRepository.lastFour());
         modelMap.addAttribute("allCategories", categoryRepository.findAll());
         modelMap.addAttribute("all", userRepository.findAll());
@@ -112,8 +110,6 @@ public class AdminController {
         }
         return "searchUser";
     }
-
-
     @RequestMapping(value = "/blockUser")
     public String update(@RequestParam("id") int id) {
         User user = userRepository.findOne(id);
@@ -134,20 +130,16 @@ public class AdminController {
         }
         return "redirect:/admin/searchUser?search=" + user.getEmail();
     }
-
     @RequestMapping(value = "/unblockVerify", method = RequestMethod.GET)
     public String unblock(@RequestParam("token") String token, @RequestParam("email") String email) {
         User one = userRepository.findOneByEmail(email);
         if (one != null) {
             if (one.getToken() != null && one.getToken().equals(token)) {
-                one.setToken("");
+                one.setToken(" ");
                 one.setVerify(true);
                 userRepository.save(one);
             }
         }
         return "redirect:/";
-
     }
-
-
 }

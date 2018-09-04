@@ -117,13 +117,9 @@ public class RegisterController {
 
         return "forgetPass";
     }
-
-
     @RequestMapping(value = "/forget")
-    public String forget(@RequestParam(name = "email", required = false) String email
-    ){
+    public String forget(@RequestParam(name = "email", required = false) String email){
         User user = userRepository.findOneByEmail(email);
-
         String alphaNumericString;
         int len = 8;
         String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -134,28 +130,22 @@ public class RegisterController {
         }
         alphaNumericString = sb.toString();
         String pass = alphaNumericString;
-
         user.setPassword(passwordEncoder.encode(alphaNumericString));
         userRepository.save(user);
-        String text = user.getName() + "Your new password are '" + pass + "' Please visit Your accaunt and UPDATE YOUR PASSWORD";
-        emailServiceImp.sendSimpleMessage(email, "Hello!", text);
+        String text = user.getName() + "Your new password is '" + pass + "' Please visit Your accaunt and UPDATE YOUR PASSWORD";
+        emailServiceImp.sendSimpleMessage(email, "Hello! ", text);
         return "redirect:/";
     }
-
-
     @RequestMapping(value = "/verify", method = RequestMethod.GET)
-    public String verify(@RequestParam("token") String token, @RequestParam("email") String email) {
-        User one = userRepository.findOneByEmail(email);
-        if (one != null) {
-            if (one.getToken() != null && one.getToken().equals(token)) {
-                one.setToken("");
-                one.setVerify(true);
-                userRepository.save(one);
+    public String verify(@RequestParam("token") String verifyToken, @RequestParam("email") String gmail) {
+        User oneUser = userRepository.findOneByEmail(gmail);
+        if (oneUser != null) {
+            if (oneUser.getToken() != null && oneUser.getToken().equals(verifyToken)) {
+                oneUser.setToken("");
+                oneUser.setVerify(true);
+                userRepository.save(oneUser);
             }
         }
         return "redirect:/";
-
     }
-
-
 }

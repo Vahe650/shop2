@@ -1,17 +1,20 @@
 package ru.savshop.shop.controller;
 
+import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import ru.savshop.shop.handler.NotFound;
 
 import javax.jws.WebParam;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class ExceptionController {
+public class ExceptionController implements ErrorController {
     @RequestMapping(value = "/verifyError")
     public String verifyerror(ModelMap map) {
         map.addAttribute("errorMessage", "You're not verified your account. \n Check your Email!!!");
@@ -29,12 +32,58 @@ public class ExceptionController {
 
     }
 
-
-    @RequestMapping(value = {"/{name}", "/{name}/{name}"}, method = RequestMethod.GET)
-    public String viewEdit(@PathVariable("name") final String name, ModelMap model) {
-        if (name.equals("null")) throw new NotFound();
-        model.addAttribute("msg", "Page not found");
+//
+//    @RequestMapping(value = {"/{name:.+}", "/{name}/{name}"}, method = RequestMethod.GET)
+//    public String viewEdit(@PathVariable("name") final String name, ModelMap model) {
+//        if (name.equals("null"))
+//            throw new NotFound();
+//        model.addAttribute("msg", "Page not found");
+//        return "404";
+//    }
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public String renderErrorPage(ModelMap map,HttpServletRequest httpRequest) {
+        String errorMsg = "";
+        int httpErrorCode = getErrorCode(httpRequest);
+        switch (httpErrorCode) {
+            case 400: {
+                errorMsg = "Http Error Code: 400. Bad Request";
+                break;
+            }
+            case 401: {
+                errorMsg = "Http Error Code: 401. Unauthorized";
+                break;
+            }
+            case 404: {
+                errorMsg = "Http Error Code: 404. Resource not found";
+                break;
+            }
+            case 500: {
+                errorMsg = "Http Error Code: 500. Internal Server Error";
+                break;
+            }
+        }
+       map.addAttribute("msg",errorMsg);
         return "404";
+    }
+
+    private int getErrorCode(HttpServletRequest httpRequest) {
+        return (Integer) httpRequest
+                .getAttribute("javax.servlet.error.status_code");
+    }
+    @RequestMapping(value = "500Error", method = RequestMethod.GET)
+    public void throwRuntimeException() {
+        throw new NullPointerException("Throwing a null pointer exception");
+    }
+
+    @RequestMapping("/error")
+    public String handleError() {
+        //do something like logging
+        return "404";
+    }
+
+    @Override
+    public String getErrorPath() {
+        return "redirect:/error";
     }
 }
 

@@ -94,6 +94,8 @@ public class ShopApplication extends WebMvcConfigurerAdapter implements CommandL
     }
 
 
+
+
     @Override
     public void run(String... strings) throws Exception {
         String email = "admin@mail.com";

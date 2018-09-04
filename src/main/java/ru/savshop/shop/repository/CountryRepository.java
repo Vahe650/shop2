@@ -5,5 +5,5 @@ import ru.savshop.shop.model.Category;
 import ru.savshop.shop.model.Country;
 
 public interface CountryRepository extends JpaRepository<Country, Integer>{
-    Category findById (int id);
+//    Category findById (int id);
 }
