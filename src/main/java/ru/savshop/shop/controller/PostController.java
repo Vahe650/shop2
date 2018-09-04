@@ -53,7 +53,11 @@ public class PostController {
             User user = ((CurrentUser) userDetails).getUser();
             map.addAttribute("current", user);
         }
-        post.setCategory(categoryRepository.getOne(id));
+        Category one = categoryRepository.findOne(id);
+        if (one==null){
+            return "redirect:/nullErrors";
+        }
+        post.setCategory(one);
         map.addAttribute("allcountry", countryRepository.findAll());
         map.addAttribute("postCategory", categoryRepository.findCategoryById(post.getCategory().getId()));
         map.addAttribute("post", new Post());
@@ -94,8 +98,8 @@ public class PostController {
             File file = new File(postImageUploadPath + path);
             uploadedFile.transferTo(file);
             Picture picture = new Picture();
-            picture.setPicUrl(path);
             picture.setPost(post);
+            picture.setPicUrl(path);
             pictureRepository.save(picture);
         }
         return "redirect:/viewDetail?id=" + post.getId();

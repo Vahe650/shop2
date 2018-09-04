@@ -69,8 +69,8 @@
                 <li><a href="/userRegister">Sign up</a></li>
                 <li class="dropdown">
 
-                    <c:if test="${current !=null}"><a href="/logout">Sign Out</a></c:if>
-                    <c:if test="${current ==null}">
+                    <c:if test="${user !=null}"><a href="/logout">Sign Out</a></c:if>
+                    <c:if test="${user ==null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign in<b class="caret"></b></a>
                     <ul class="dropdown-menu" style="padding: 15px;min-width: 250px;">
                         <li>
@@ -136,6 +136,7 @@
                     </div>
                 </form>
             </div>
+            <c:if test="${result.size()!=0}">
             <h4>Price Range</h4>
             <form action="/middleRange">
                 <div class="range">
@@ -145,12 +146,16 @@
                     <output id="rangePrimary" style="text-align:center; color: red; ">TO</output>
                     <input type="range" name="secondInt" min="0" max="100000" value="50" step="50"
                            onchange="rangePrimary.value=value">
+
                     <input type="hidden" name="id" value="${result[0].category.id}">
+
+
                     <button class="btn btn-primary" type="submit" style="align-items: center"><span
                             style="align-content: center"
                             class="glyphicon glyphicon-search"></span></button>
                 </div>
             </form>
+            </c:if>
 
 
             <h4>Categories</h4>

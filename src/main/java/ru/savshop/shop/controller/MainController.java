@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.savshop.shop.model.Category;
 import ru.savshop.shop.model.Post;
 import ru.savshop.shop.model.User;
 import ru.savshop.shop.repository.*;
@@ -13,6 +14,7 @@ import ru.savshop.shop.security.CurrentUser;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 
 @Controller
@@ -59,8 +61,8 @@ public class MainController {
         modelMap.addAttribute("four", postRepository.lastFour());
         modelMap.addAttribute("allCategories", categoryRepository.findAll());
         List<Post> postList = postRepository.findPostsByTitleLike(search.trim());
-        if (search != null && postList.isEmpty()) {
-            modelMap.addAttribute("mess", "Search Result with " + "' " + search + " '" + " not Found");
+        if ( postList.isEmpty()) {
+            modelMap.addAttribute("mes", "Search Result with " + "' " + search + " '" + " not Found");
         } else {
             modelMap.addAttribute("result", postList);
         }
@@ -69,24 +71,36 @@ public class MainController {
 
     @RequestMapping(value = "/categorySearch", method = RequestMethod.GET)
     public String catergoryResult(ModelMap modelMap, @RequestParam(name = "id") int id,@RequestParam(name = "mes",
-            required = false) String mes) {
+            required = false) String mes, @AuthenticationPrincipal UserDetails userDetails) {
+        Category one = categoryRepository.findOne(id);
+        if (one==null){
+            return "redirect:/nullErrors";
+        }
+        if (userDetails != null) {
+            User currentUser = ((CurrentUser) userDetails).getUser();
+            modelMap.addAttribute("user", userRepository.findOne(currentUser.getId()));
+        }
 
         modelMap.addAttribute("mes", mes != null ? mes: "");
         List<Post> postList = postRepository.findPostsByCategoryIdOrderByViewDesc(id);
+        if (postList.isEmpty()){
+            modelMap.addAttribute("mes","there is no any post in '"+one.getName()+"' CATEGORY");
+        }
         modelMap.addAttribute("four",postRepository.lastFour());
         modelMap.addAttribute("allCategories", categoryRepository.findAll());
         modelMap.addAttribute("allPosts",postRepository.findByUserVerify());
         modelMap.addAttribute("result", postList);
+
         return "result";
     }
     @RequestMapping(value = "/middleRange")
     public String middle(ModelMap map, @RequestParam(name = "firstInt") int firstId,
                          @RequestParam(name = "secondInt") int secondId,
-                         @RequestParam(name = "id") int id, @AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails != null) {
-            User currentUser = ((CurrentUser) userDetails).getUser();
-            map.addAttribute("user", userRepository.findOne(currentUser.getId()));
+                         @RequestParam(name = "id") int id) {
+        if (id!=categoryRepository.findOne(id).getId()){
+            return "redirect:/nullErrors";
         }
+
         map.addAttribute("allPosts", postRepository.findByUserVerify());
         map.addAttribute("four", postRepository.lastFour());
         map.addAttribute("allCategories", categoryRepository.findAll());
@@ -103,9 +117,11 @@ public class MainController {
 //        }
 //        return "result";
         List<Post> postList = postRepository.betweenPrice(firstId, secondId,id);
+
+
         if (postList.isEmpty()) {
             String mes="There is no any posts in  " + firstId + " from " + secondId + " range";
-            map.addAttribute("mess", mes);
+            map.addAttribute("mes", mes);
             return"redirect:/categorySearch?id="+id+"&mes="+mes;
         } else {
             map.addAttribute("result", postList);
@@ -122,6 +138,9 @@ public class MainController {
             post.addAttribute("current", currentUser);
         }
         Post post1 = postRepository.findPostsById(id);
+        if (post1==null){
+            return "redirect:/nullErrors";
+        }
         int view = post1.getView();
         post1.setView(++view);
         postRepository.save(post1);

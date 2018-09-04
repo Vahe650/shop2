@@ -43,30 +43,34 @@ public class ExceptionController implements ErrorController {
 //        return "404";
 //    }
     @RequestMapping(value = "/error", method = RequestMethod.GET)
-    public String renderErrorPage(ModelMap map, HttpServletRequest httpRequest) {
+    public String renderErrorPage(ModelMap map, HttpServletRequest httpRequest) throws Exception {
         String errorMsg = "";
         int httpErrorCode = getErrorCode(httpRequest);
         switch (httpErrorCode) {
             case 400: {
-                errorMsg = "Http Error Code: 400. Bad Request";
+                errorMsg = "Http Error Code: " + httpErrorCode + ". Bad Request";
                 break;
             }
             case 401: {
-                errorMsg = "Http Error Code: 401. Unauthorized";
+                errorMsg = "Http Error Code:  " + httpErrorCode + ". Unauthorized";
                 break;
             }
             case 404: {
-                errorMsg = "Http Error Code: 404. Resource not found";
+                errorMsg = "Http Error Code:" + httpErrorCode + ". Resource not found";
                 break;
             }
             case 500: {
-                errorMsg = "Http Error Code: 500. Internal Server Error";
+                errorMsg = "Http Error Code: " + httpErrorCode + ". Internal Server Error";
                 break;
             }
         }
-            map.addAttribute("msg", errorMsg);
-      return "404";
+        map.addAttribute("msg", errorMsg);
+
+
+        return "404";
     }
+
+
 
     private int getErrorCode(HttpServletRequest httpRequest) {
         return (Integer) httpRequest
@@ -74,8 +78,9 @@ public class ExceptionController implements ErrorController {
     }
 
 
-    @RequestMapping("/error")
-    public String handleError() {
+    @RequestMapping("/nullErrors")
+    public String handleError(ModelMap map) {
+        map.addAttribute("msg","you are in wrong way ");
         return "404";
     }
 
