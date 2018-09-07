@@ -126,9 +126,7 @@
                     <li><a href="/addPost">Add classified</a></li>
                 </ol>
                 <h2>Add Post</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sit amet porta eros, eget facilisis
-                    arcu. Duis condimentum fermentum enim, ac rutrum erat venenatis vel. Morbi pharetra viverra
-                    faucibus.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br><h2 style="color: red;">${message}</h2></p>
                 <hr>
                 <form role="form">
                     <div class="panel panel-info">
@@ -146,7 +144,7 @@
                             </div>
                             <div class="input-group" style="width: 150px;">
                                 <spring:label path="title">Price</spring:label>
-                                <spring:input placeholder="Price" class="form-control" path="price"/>
+                                <spring:input type="number" step="50" placeholder="Price" class="form-control" path="price"/>
                             </div>
                         </div>
                         <div class="panel-body">

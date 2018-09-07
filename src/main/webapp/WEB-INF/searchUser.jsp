@@ -179,10 +179,10 @@
             <h5>${one.email}</h5>
             <a href="/admin/deleteUser?id=${one.id}"><button btn btn-success btn-block>Delete</button></a>
             <c:if test="${one.verify==false}">
-            <a href="/blockUser?id=${one.id}"><button btn btn-success btn-block>Unblock</button></a>
+            <a href="/admin/blockUser?id=${one.id}"><button btn btn-success btn-block>Unblock</button></a>
             </c:if>
             <c:if test="${one.verify==true}">
-            <a href="/blockUser?id=${one.id}"><button btn btn-success btn-block>Block</button></a>
+            <a href="/admin/blockUser?id=${one.id}"><button btn btn-success btn-block>Block</button></a>
             </c:if>
             </div>
             </div>

@@ -78,7 +78,7 @@ public class RegisterController {
         StringBuilder sb = new StringBuilder();
         if (result.hasErrors()) {
             for (ObjectError objectError : result.getAllErrors()) {
-                sb.append(objectError.getDefaultMessage() + "<br>");
+                sb.append(objectError.getDefaultMessage()).append("<br>");
             }
             return "redirect:/userRegister?message=" + sb.toString();
         }

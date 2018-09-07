@@ -46,7 +46,11 @@ public class MainController {
 
 
     @RequestMapping(value = "/searchResult", method = RequestMethod.GET)
-    public String result(ModelMap modelMap, @RequestParam(name = "search", required = false) String search){
+    public String result(ModelMap modelMap, @RequestParam(name = "search", required = false) String search,@AuthenticationPrincipal UserDetails userDetails){
+        if (userDetails != null) {
+            User currentUser = ((CurrentUser) userDetails).getUser();
+            modelMap.addAttribute("user", userRepository.findOne(currentUser.getId()));
+        }
         modelMap.addAttribute("allPosts",postRepository.findByUserVerify());
         modelMap.addAttribute("four", postRepository.lastFour());
         modelMap.addAttribute("allCategories", categoryRepository.findAll());
@@ -84,7 +88,11 @@ public class MainController {
     @RequestMapping(value = "/middleRange")
     public String middle(ModelMap map, @RequestParam(name = "firstInt") int firstId,
                          @RequestParam(name = "secondInt") int secondId,
-                         @RequestParam(name = "id") int id) {
+                         @RequestParam(name = "id") int id,@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails != null) {
+            User currentUser = ((CurrentUser) userDetails).getUser();
+            map.addAttribute("user", userRepository.findOne(currentUser.getId()));
+        }
         if (id!=categoryRepository.findOne(id).getId()){
             return "redirect:/nullErrors";
         }

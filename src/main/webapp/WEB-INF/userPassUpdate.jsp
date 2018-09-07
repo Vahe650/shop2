@@ -140,11 +140,11 @@
 
                             <spring:hidden path="id" value="${current.id}"></spring:hidden>
                             <div class="form-group">
-                                <form:input type="password" path="password" id="txtNewPassword" tabindex="2" class="form-control"
+                                <input type="password" name="one"  id="txtNewPassword" tabindex="2" class="form-control"
                                             placeholder="New Password"/>
                             </div>
                             <div class="form-group">
-                                <input type="password" name="confirm_assword"  id="txtConfirmPassword" onChange="checkPasswordMatch();" tabindex="2"
+                                <input type="password" name="two"  id="txtConfirmPassword" onChange="checkPasswordMatch();" tabindex="2"
                                             class="form-control" placeholder="Confirm Password"/>
                                 <div class="registrationFormAlert" id="divCheckPasswordMatch">
                                 </div>
@@ -192,9 +192,9 @@
 </div>
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 
-<style>
-    #divCheckPasswordMatch{ font-weight:bold;}
-</style>
+<%--<style>--%>
+    <%--#divCheckPasswordMatch{color:red; font-weight:bold;}--%>
+<%--</style>--%>
 
 <script>
     function checkPasswordMatch() {
@@ -202,7 +202,7 @@
         var confirmPassword = $("#txtConfirmPassword").val();
 
         if (password != confirmPassword)
-            $("#divCheckPasswordMatch").css("color","red").html("Passwords do not match!");
+            $("#divCheckPasswordMatch stylec").css("color","red").html("Passwords do not match!");
 
         else
             $("#divCheckPasswordMatch").css("color","green").html("Passwords match.");

@@ -3,9 +3,12 @@ package ru.savshop.shop.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import java.util.List;
 
 @Data
@@ -20,11 +23,14 @@ public class Post {
     @Column
     private int id;
     @Column
+    @NotEmpty(message = "Name can't be empty")
     private String title;
     @Column
+    @NotEmpty(message = "Description can't be empty")
     private String description;
     @Column
     @NumberFormat
+    @DecimalMax("10000000000.0")@DecimalMin("0.0")
     private double price;
     @Column
     private String timestamp;

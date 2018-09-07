@@ -129,7 +129,7 @@
                     <li><a href="/addPost">Add classified</a></li>
                 </ol>
                 <h2>Update details</h2>
-                <p><h4 style="color: red">${errorMessage}</h4></p>
+                <p><h4 style="color: red">${message}</h4></p>
                 <hr>
                 <form role="form">
                     <div class="panel panel-info">

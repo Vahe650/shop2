@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.savshop.shop.model.*;
@@ -17,6 +19,7 @@ import ru.savshop.shop.repository.*;
 import ru.savshop.shop.security.CurrentUser;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
@@ -47,7 +50,8 @@ public class PostController {
     @RequestMapping(value = "/post", method = RequestMethod.GET)
     public String adminPage(ModelMap map,
                             @ModelAttribute(name = "post") Post post,
-                            @RequestParam(name = "categ") int id, @AuthenticationPrincipal UserDetails userDetails) {
+                            @RequestParam(name = "categ",required = false) Integer id,@RequestParam(name = "message",required = false) String message, @AuthenticationPrincipal UserDetails userDetails) {
+
         if (userDetails != null) {
             User user = ((CurrentUser) userDetails).getUser();
             map.addAttribute("current", user);
@@ -57,6 +61,7 @@ public class PostController {
             return "redirect:/nullErrors";
         }
         post.setCategory(one);
+        map.addAttribute("message", message != null ? message : "");
         map.addAttribute("allcountry", countryRepository.findAll());
         map.addAttribute("postCategory", categoryRepository.findCategoryById(post.getCategory().getId()));
         map.addAttribute("post", new Post());
@@ -78,8 +83,15 @@ public class PostController {
     }
 
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
-    public String AddPost(@ModelAttribute(name = "post") Post post,
+    public String AddPost(@Valid @ModelAttribute(name = "post") Post post,BindingResult result,
                           @RequestParam(value = "picture") MultipartFile[] uploadingFiles, @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        if (result.hasErrors()) {
+            for (ObjectError objectError : result.getAllErrors()) {
+                sb.append(objectError.getDefaultMessage()).append("<br>");
+            }
+            return "redirect:/post?categ="+post.getCategory().getId()+"&message=" + sb.toString();
+        }
         if (post.getCategory() == null) {
             return "redirect:/chooseCategory";
         }

@@ -32,10 +32,9 @@ public class User {
     @NotEmpty(message = "Email can't be empty")
     private String email;
     @Column
-    @NotEmpty(message = "Password can't be empty")
     private String password;
     @Transient
-    @Size(min = 5, max = 15)
+    @Size(message = "password size must be beetween 5-15",min = 5, max = 15)
     private String confirmPassword;
     @Column (name = "user_pic_pat")
     private String picUrl;

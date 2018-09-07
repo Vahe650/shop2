@@ -66,7 +66,7 @@ public class AdminController {
         StringBuilder sb = new StringBuilder();
         if (result.hasErrors()) {
             for (ObjectError objectError : result.getAllErrors()) {
-                sb.append(objectError.getDefaultMessage() + "<br>");
+                sb.append(objectError.getDefaultMessage()).append("<br>");
             }
             return "redirect:/admin?message=" + sb.toString();
         }
@@ -80,18 +80,11 @@ public class AdminController {
         StringBuilder sb = new StringBuilder();
         if (result.hasErrors()) {
             for (ObjectError objectError : result.getAllErrors()) {
-                sb.append(objectError.getDefaultMessage() + "<br>");
+                sb.append(objectError.getDefaultMessage()).append("<br>");
             }
             return "redirect:/admin?message=" + sb.toString();
         }
         categoryRepository.save(categories);
-        StringBuilder sbone = new StringBuilder();
-        if (result.hasErrors()) {
-            for (ObjectError objectError : result.getAllErrors()) {
-                sbone.append(objectError.getDefaultMessage() + "<br>");
-            }
-            return "redirect:/admin?message=" + sbone.toString();
-        }
         for (String attribute : atributes) {
             Attributes categoryAttribute = new Attributes();
             categoryAttribute.setCategory(categories);
@@ -106,7 +99,7 @@ public class AdminController {
         StringBuilder sb = new StringBuilder();
         if (result.hasErrors()) {
             for (ObjectError objectError : result.getAllErrors()) {
-                sb.append(objectError.getDefaultMessage() + "<br>");
+                sb.append(objectError.getDefaultMessage()).append("<br>");
             }
             return "redirect:/admin?message=" + sb.toString();
         }
@@ -153,7 +146,7 @@ public class AdminController {
         return "searchUser";
     }
 
-    @RequestMapping(value = "/blockUser")
+    @RequestMapping(value = "/admin/blockUser")
     public String update(@RequestParam("id") int id) {
         User user = userRepository.findOne(id);
         if (user.isVerify()) {
@@ -166,7 +159,7 @@ public class AdminController {
         } else {
             user.setToken(UUID.randomUUID().toString());
             userRepository.save(user);
-            String url = String.format("http://localhost:8080/unblockVerify?token=%s&email=%s", user.getToken(), user.getEmail());
+            String url = String.format("http://localhost:8080/admin/unblockVerify?token=%s&email=%s", user.getToken(), user.getEmail());
             String text = String.format("hello %s you are unblocked, click " +
                     "on this link for visiting your profile %s", user.getName(), url);
             emailServiceImp.sendSimpleMessage(user.getEmail(), "Welcome...", text);
@@ -174,7 +167,7 @@ public class AdminController {
         return "redirect:/admin/searchUser?search=" + user.getEmail();
     }
 
-    @RequestMapping(value = "/unblockVerify", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/unblockVerify", method = RequestMethod.GET)
     public String unblock(@RequestParam("token") String token, @RequestParam("email") String email) {
         User one = userRepository.findOneByEmail(email);
         if (one != null) {
