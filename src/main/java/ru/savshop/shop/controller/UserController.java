@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.savshop.shop.handler.CustomFailureHandler;
 import ru.savshop.shop.mail.EmailServiceImp;
 import ru.savshop.shop.model.Post;
 import ru.savshop.shop.model.User;
@@ -22,12 +23,15 @@ import ru.savshop.shop.model.UserType;
 import ru.savshop.shop.repository.*;
 import ru.savshop.shop.security.CurrentUser;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.AccessDeniedException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,13 +63,18 @@ public class UserController {
     }
 
     @RequestMapping(value = "/deletePost")
-    public String del(@RequestParam("id") int id, @AuthenticationPrincipal UserDetails userDetails) {
+    public String del(@RequestParam("id") int id, @AuthenticationPrincipal UserDetails userDetails){
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            postRepository.delete(id);
+            Post post=postRepository.findOne(id);
+            if (post.getUser().getId()==currentUser.getId()){
+                postRepository.delete(id);
+            }else {
+                return "redirect:/accessError";
+            }
             return "redirect:/userProfileDetail?id=" + currentUser.getId();
         }
-        return "redirect:/userProfileDetail";
+        return "redirect:/login";
     }
 
 

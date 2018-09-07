@@ -53,7 +53,7 @@ public class PostController {
             map.addAttribute("current", user);
         }
         Category one = categoryRepository.findOne(id);
-        if (one==null){
+        if (one == null) {
             return "redirect:/nullErrors";
         }
         post.setCategory(one);
@@ -79,8 +79,8 @@ public class PostController {
 
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
     public String AddPost(@ModelAttribute(name = "post") Post post,
-                          @RequestParam(value = "picture") MultipartFile[] uploadingFiles,@AuthenticationPrincipal UserDetails userDetails) throws IOException {
-        if (post.getCategory()==null){
+                          @RequestParam(value = "picture") MultipartFile[] uploadingFiles, @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+        if (post.getCategory() == null) {
             return "redirect:/chooseCategory";
         }
         if (userDetails != null) {
@@ -154,18 +154,26 @@ public class PostController {
         return "redirect:/viewDetail?id=" + post.getId();
     }
 
-    @RequestMapping(value = "picDelete")
-    public String deletImage(@RequestParam("id") int id) {
-        Picture one = pictureRepository.getOne(id);
-        pictureRepository.delete(one.getId());
-        return "redirect:/viewDetail?id=" + one.getPost().getId();
+    @RequestMapping(value = "/picDelete")
+    public String deletImage(@RequestParam("id") int id, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails != null) {
+            User currentUser = ((CurrentUser) userDetails).getUser();
+            Picture one = pictureRepository.getOne(id);
+            if (one.getPost().getUser().getId() == currentUser.getId()) {
+                pictureRepository.delete(one.getId());
+            } else {
+                return "redirect:/accessError";
+            }
+            return "redirect:/viewDetail?id=" + one.getPost().getId();
+        }
+        return "redirect:/login";
     }
-
-    @RequestMapping(value = "/post/image", method = RequestMethod.GET)
-    public void getImageAsByteArray(HttpServletResponse response, @RequestParam("fileName") String fileName) throws IOException {
-        InputStream in = new FileInputStream(postImageUploadPath + fileName);
-        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-        response.setBufferSize(5000000);
-        IOUtils.copy(in, response.getOutputStream());
+        @RequestMapping(value = "/post/image", method = RequestMethod.GET)
+        public void getImageAsByteArray (HttpServletResponse response, @RequestParam("fileName") String fileName) throws
+        IOException {
+            InputStream in = new FileInputStream(postImageUploadPath + fileName);
+            response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+            response.setBufferSize(5000000);
+            IOUtils.copy(in, response.getOutputStream());
+        }
     }
-}

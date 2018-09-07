@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import ru.savshop.shop.model.Category;
 import ru.savshop.shop.model.Picture;
 import ru.savshop.shop.model.Post;
+import ru.savshop.shop.model.User;
 
 import java.util.List;
 
@@ -23,6 +24,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findPostsByCategoryIdOrderByViewDesc(@Param("id") int id);
 
     Post findPostsById(int id);
+
+    Post findPostByUser(User user);
 
     Post findOneByPicturesId(Picture picture);
 
