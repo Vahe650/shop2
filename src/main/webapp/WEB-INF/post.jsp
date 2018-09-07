@@ -153,7 +153,7 @@
                             <div class="form-group">
                                 <%--<spring:label path="title">Country</spring:label>--%>
                                 <%--<spring:select class="form-control" path="country" items="${allcountry}"--%>
-                                               <%--itemLabel="name"></spring:select>--%>
+                                               <%--itemLabel="attributeName"></spring:select>--%>
 
 
 
@@ -187,7 +187,7 @@
                             <c:forEach items="${atribute}" varStatus="at" var="att">
                                 <div class="form-group">
                                     <form:label
-                                            path="attributeValues[${at.index}].atributes.name">${att.name}</form:label><br>
+                                            path="attributeValues[${at.index}].atributes.attributeName">${att.attributeName}</form:label><br>
                                     <form:hidden path="attributeValues[${at.index}].atributes.id" value="${att.id}"/>
                                     <form:input path="attributeValues[${at.index}].value" class="form-control"/>
                                     <form:hidden path="attributeValues[${at.index}].id"/>

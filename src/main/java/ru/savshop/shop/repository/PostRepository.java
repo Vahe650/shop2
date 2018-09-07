@@ -13,14 +13,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     List<Post> findAllByUserId(int id);
 
-
-    //       @Query("SELECT t FROM Post t WHERE (t.title) LIKE LOWER(concat('%',:searchTerm,'%') ) OR LOWER(t.description) " +
-//               "LIKE LOWER(CONCAT('%',:searchTerm,'%')) ORDER BY t.view desc")
-//       List<Post> findPostsByTitleLike(@Param("searchTerm") String find);
-//
     @Query(value = "SELECT * FROM Post JOIN USER ON user.`id`=post.`user_id` AND user.`verify`=TRUE WHERE post.title " +
             " like lower(concat('%',:searchTerm,'%'))" +
-//               " OR LOWER post.description LIKE lower(concat('%',:search,'%'))" +
             " ORDER BY post.`view` desc", nativeQuery = true)
     List<Post> findPostsByTitleLike(@Param("searchTerm") String find);
 
@@ -36,9 +30,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "  where category_id=:id and price between :firstParam and :secondParam ORDER By view", nativeQuery = true)
     List<Post> betweenPrice(@Param("firstParam") double firstParam, @Param("secondParam") double secondParam, @Param("id") int id);
 
-    @Query(value = "select * from  post JOIN USER ON user.`id`=post.`user_id` AND user.`verify`=TRUE  order by post.`id` limit 4 ", nativeQuery = true)
+    @Query(value = "select * from  post JOIN USER ON user.`id`=post.`user_id` AND user.`verify`=TRUE  order by post.`id` Desc limit 4 ", nativeQuery = true)
     List<Post> lastFour();
 
-    @Query(value = "SELECT * FROM Post  JOIN USER ON user.`id`=post.`user_id` AND user.`verify`=TRUE", nativeQuery = true)
+    @Query(value = "SELECT * FROM Post  JOIN USER ON user.`id`=post.`user_id` AND user.`verify`=TRUE ORDER BY post.`id` asc", nativeQuery = true)
     List<Post> findByUserVerify();
 }

@@ -69,7 +69,8 @@
 
                 <div class="panel panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Add Category:</h3>
+                        <h3 class="panel-title">Add Parent Category:</h3>
+                        <h2 style="color: red;">${message}</h2></p>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
@@ -90,7 +91,9 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <spring:form action="/admin/addParrentCategoryAndAtribute" method="post"
-                                         modelAttribute="category">
+                                         modelAttribute="categories">
+                                <spring:label path="name">Input Child category </spring:label>
+                                <spring:input class="form-control" path="name"></spring:input><br>
 
                                 <spring:select path="parentId" class="form-control"
                                                placeholder="Select Country" itemLabel="name">
@@ -106,8 +109,7 @@
                                     </c:forEach>
                                 </spring:select>
                                 <br>
-                                <spring:label path="name">Input new category </spring:label>
-                                <spring:input class="form-control" path="name"></spring:input><br>
+
 
                                 <spring:label path="name">Attributes</spring:label>
                                 <button onclick="addAttribute()" class="btn btn-success btn-block"
@@ -115,7 +117,7 @@
                                 </button>
                                 <br>
                                 <div id="attributeBlock">
-                                    <input class="form-control" type="text" name="atribute"
+                                    <input class="form-control" type="text" name="atributes"
                                            placeholder="attribute"/>
                                 </div>
                                 <br>
@@ -142,7 +144,7 @@
                 </div>
                 <div class="panel panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title"> Add Parent Country:</h3>
+                        <h3 class="panel-title"> Add Child Country:</h3>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
@@ -153,7 +155,7 @@
                                 <spring:input class="form-control" path="name"></spring:input><br>
                                 <%--<spring:select class="form-control" path="parentId"--%>
                                                <%--items="${allCountries}"--%>
-                                               <%--itemLabel="name"></spring:select><br>--%>
+                                               <%--itemLabel="attributeName"></spring:select><br>--%>
                                 <spring:select path="parentId" class="form-control"
                                                placeholder="Select Country" itemLabel="name">
                                 <c:forEach items="${allCountries}" var="country">
@@ -203,7 +205,7 @@
 <script>
 
     function addAttribute() {
-        $('#attributeBlock').append('<br/><input type="text" name="atribute" placeholder="atribute"/> ');
+        $('#attributeBlock').append('<br/><input type="text" attributeName="atribute" placeholder="atribute"/> ');
     }
 </script>
 <script src="../template/js/jquery-1.11.1.min.js"></script>
@@ -221,10 +223,10 @@
 <%--<head>--%>
 <%--<meta charset="utf-8">--%>
 <%--<meta http-equiv="X-UA-Compatible" content="IE=edge">--%>
-<%--<meta name="viewport" content="width=device-width, initial-scale=1">--%>
-<%--<meta name="description" content="...">--%>
-<%--<meta name="keywords" content="...">--%>
-<%--<meta name="author" content="...">--%>
+<%--<meta attributeName="viewport" content="width=device-width, initial-scale=1">--%>
+<%--<meta attributeName="description" content="...">--%>
+<%--<meta attributeName="keywords" content="...">--%>
+<%--<meta attributeName="author" content="...">--%>
 <%--<title>CZSale - Classified Ads Website</title>--%>
 <%--<link rel="stylesheet" href="../template/css/CZSale.css" type="text/css"/>--%>
 <%--<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->--%>
@@ -268,7 +270,7 @@
 <%--<div class="well well-sm">--%>
 <%--<form action="/searchResult" method="get">--%>
 <%--<div class="input-group">--%>
-<%--<input name="searchUser" type="text" class="form-control"--%>
+<%--<input attributeName="searchUser" type="text" class="form-control"--%>
 <%--placeholder="What are you looking for?">--%>
 <%--<span class="input-group-btn">--%>
 <%--<button class="btn btn-primary" type="submit"><span--%>
@@ -291,8 +293,8 @@
 <%--<div class="form-group">--%>
 <%--<spring:form action="/admin/addCategory" method="post"--%>
 <%--modelAttribute="category">--%>
-<%--<spring:label path="name">Name:</spring:label>--%>
-<%--<spring:input class="form-control" path="name"></spring:input><br>--%>
+<%--<spring:label path="attributeName">Name:</spring:label>--%>
+<%--<spring:input class="form-control" path="attributeName"></spring:input><br>--%>
 <%--<input class="btn btn-success btn-block" type="submit" value="ADD">--%>
 
 <%--</spring:form>--%>
@@ -308,21 +310,21 @@
 <%--<spring:form action="/admin/addParrentCategoryAndAtribute" method="post"--%>
 <%--modelAttribute="category">--%>
 
-<%--<spring:label path="name">Change parent category </spring:label>--%>
+<%--<spring:label path="attributeName">Change parent category </spring:label>--%>
 <%--<spring:select class="form-control" path="parentId"--%>
 <%--items="${allCategories}"--%>
-<%--itemLabel="name"></spring:select>--%>
+<%--itemLabel="attributeName"></spring:select>--%>
 <%--<br>--%>
-<%--<spring:label path="name">Input new category </spring:label>--%>
-<%--<spring:input class="form-control" path="name"></spring:input><br>--%>
+<%--<spring:label path="attributeName">Input new category </spring:label>--%>
+<%--<spring:input class="form-control" path="attributeName"></spring:input><br>--%>
 
-<%--<spring:label path="name">Attributes</spring:label>--%>
+<%--<spring:label path="attributeName">Attributes</spring:label>--%>
 <%--<button onclick="addAttribute()" class="btn btn-success btn-block"--%>
 <%--type="button">Add Attribute line--%>
 <%--</button>--%>
 <%--<br>--%>
 <%--<div id="attributeBlock">--%>
-<%--<input class="form-control" type="text" name="atribute"--%>
+<%--<input class="form-control" type="text" attributeName="atribute"--%>
 <%--placeholder="attribute"/>--%>
 <%--</div>--%>
 <%--<br>--%>
@@ -340,8 +342,8 @@
 <%--<spring:form action="/admin/addCountry" method="post"--%>
 <%--modelAttribute="country">--%>
 
-<%--<spring:label path="name">Name:</spring:label><br>--%>
-<%--<spring:input class="form-control" path="name"></spring:input><br>--%>
+<%--<spring:label path="attributeName">Name:</spring:label><br>--%>
+<%--<spring:input class="form-control" path="attributeName"></spring:input><br>--%>
 <%--<input class="btn btn-success btn-block" type="submit" value="ADD">--%>
 <%--</spring:form>--%>
 <%--</div>--%>
@@ -356,11 +358,11 @@
 <%--<spring:form action="/admin/addCountry" method="post"--%>
 <%--modelAttribute="country">--%>
 
-<%--<spring:label path="name">Name:</spring:label>--%>
-<%--<spring:input class="form-control" path="name"></spring:input><br>--%>
+<%--<spring:label path="attributeName">Name:</spring:label>--%>
+<%--<spring:input class="form-control" path="attributeName"></spring:input><br>--%>
 <%--<spring:select class="form-control" path="parentId"--%>
 <%--items="${allCountries}"--%>
-<%--itemLabel="name"></spring:select><br>--%>
+<%--itemLabel="attributeName"></spring:select><br>--%>
 <%--<input class="btn btn-success btn-block" type="submit" value="ADD">--%>
 <%--</spring:form>--%>
 <%--</div>--%>
@@ -397,7 +399,7 @@
 <%--<script>--%>
 
 <%--function addAttribute() {--%>
-<%--$('#attributeBlock').append('<br/><input type="text" name="atribute" placeholder="atribute"/> ');--%>
+<%--$('#attributeBlock').append('<br/><input type="text" attributeName="atribute" placeholder="atribute"/> ');--%>
 <%--}--%>
 <%--</script>--%>
 <%--<script src="../template/js/jquery-1.11.1.min.js"></script>--%>

@@ -5,18 +5,18 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import ru.savshop.shop.mail.EmailServiceImp;
 import ru.savshop.shop.model.*;
 import ru.savshop.shop.repository.*;
 import ru.savshop.shop.security.CurrentUser;
 
-import java.io.File;
-import java.io.IOException;
+import javax.validation.Valid;
 import java.util.*;
 
 @Controller
@@ -36,9 +36,23 @@ public class AdminController {
     private AttributeRepository attributeRepository;
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String adminPage(ModelMap map) {
+    public String adminPage(ModelMap map, @RequestParam(name = "message",
+            required = false) String message) {
+        List<Category> categories = new LinkedList<>();
+        for (Category category : categoryRepository.findAll()) {
+            if (category.getParentId() == 0) {
+                categories.add(category);
+            }
+            for (Category category1 : categoryRepository.findAll()) {
+                    if (category.getId() == category1.getParentId()) {
+                        categories.add(category1);
+                    }
+                }
+            }
+        map.addAttribute("allCategories", categories);
+        map.addAttribute("message", message != null ? message : "");
         map.addAttribute("category", new Category());
-        map.addAttribute("allCategories", categoryRepository.findAll());
+        map.addAttribute("categories", new Category());
         map.addAttribute("country", new Country());
         map.addAttribute("allCountries", countryRepository.findAll());
         map.addAttribute("atribute", new Attributes());
@@ -48,28 +62,54 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/addCategory", method = RequestMethod.POST)
-    public String adminPageAddCategory(@ModelAttribute(name = "category") Category category) {
+    public String adminPageAddCategory(@Valid @ModelAttribute(name = "category") Category category, BindingResult result) {
+        StringBuilder sb = new StringBuilder();
+        if (result.hasErrors()) {
+            for (ObjectError objectError : result.getAllErrors()) {
+                sb.append(objectError.getDefaultMessage() + "<br>");
+            }
+            return "redirect:/admin?message=" + sb.toString();
+        }
         categoryRepository.save(category);
         return "redirect:/admin";
     }
 
     @RequestMapping(value = "/admin/addParrentCategoryAndAtribute", method = RequestMethod.POST)
-    public String addParrentCategoryAndAtribute(@ModelAttribute(name = "category") Category category,
-                                                @RequestParam("atribute") List<String> atributes) {
-        categoryRepository.save(category);
-//        List<Attributes> attributesList = new LinkedList<>();
+    public String addParrentCategoryAndAtribute(@Valid @ModelAttribute(name = "category") Category categories, BindingResult result,
+                                                @RequestParam("atributes") List<String> atributes) {
+        StringBuilder sb = new StringBuilder();
+        if (result.hasErrors()) {
+            for (ObjectError objectError : result.getAllErrors()) {
+                sb.append(objectError.getDefaultMessage() + "<br>");
+            }
+            return "redirect:/admin?message=" + sb.toString();
+        }
+        categoryRepository.save(categories);
+        StringBuilder sbone = new StringBuilder();
+        if (result.hasErrors()) {
+            for (ObjectError objectError : result.getAllErrors()) {
+                sbone.append(objectError.getDefaultMessage() + "<br>");
+            }
+            return "redirect:/admin?message=" + sbone.toString();
+        }
         for (String attribute : atributes) {
             Attributes categoryAttribute = new Attributes();
-            categoryAttribute.setCategory(category);
-            categoryAttribute.setName(attribute);
+            categoryAttribute.setCategory(categories);
+            categoryAttribute.setAttributeName(attribute);
             attributeRepository.save(categoryAttribute);
-//            attributesList.add(atributes1);
         }
         return "redirect:/admin";
     }
 
     @RequestMapping(value = "/admin/addCountry", method = RequestMethod.POST)
-    public String adminPageAddcountry(@ModelAttribute(name = "country") Country country) {
+    public String adminPageAddcountry(@Valid @ModelAttribute(name = "country") Country country, BindingResult result) {
+        StringBuilder sb = new StringBuilder();
+        if (result.hasErrors()) {
+            for (ObjectError objectError : result.getAllErrors()) {
+                sb.append(objectError.getDefaultMessage() + "<br>");
+            }
+            return "redirect:/admin?message=" + sb.toString();
+        }
         countryRepository.save(country);
         return "redirect:/admin";
     }
@@ -86,11 +126,13 @@ public class AdminController {
         userRepository.delete(id);
         return "redirect:/admin/searchUser";
     }
+
     @RequestMapping(value = "/admin/deletePost")
     public String del(@RequestParam("id") int id) {
         postRepository.delete(id);
         return "redirect:/admin/allUsers";
     }
+
     @RequestMapping(value = "/admin/searchUser", method = RequestMethod.GET)
     public String searchUser(ModelMap modelMap, @RequestParam(name = "search", required = false) String search, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
@@ -110,6 +152,7 @@ public class AdminController {
         }
         return "searchUser";
     }
+
     @RequestMapping(value = "/blockUser")
     public String update(@RequestParam("id") int id) {
         User user = userRepository.findOne(id);
@@ -130,6 +173,7 @@ public class AdminController {
         }
         return "redirect:/admin/searchUser?search=" + user.getEmail();
     }
+
     @RequestMapping(value = "/unblockVerify", method = RequestMethod.GET)
     public String unblock(@RequestParam("token") String token, @RequestParam("email") String email) {
         User one = userRepository.findOneByEmail(email);

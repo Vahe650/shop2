@@ -7,6 +7,5 @@ import ru.savshop.shop.model.Category;
 import java.util.List;
 
 public interface AttributeRepository extends JpaRepository<Attributes, Integer> {
-
     List<Attributes> findAllByCategory (Category category);
 }

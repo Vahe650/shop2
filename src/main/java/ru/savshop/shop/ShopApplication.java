@@ -67,15 +67,14 @@ public class ShopApplication extends WebMvcConfigurerAdapter implements CommandL
         bean.setSuffix(".jsp");
         return bean;
     }
+
     @Bean(name = "mailSender")
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-
         mailSender.setUsername(email);
         mailSender.setPassword(password);
-
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
@@ -84,7 +83,6 @@ public class ShopApplication extends WebMvcConfigurerAdapter implements CommandL
         return mailSender;
     }
 
-
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
@@ -92,9 +90,6 @@ public class ShopApplication extends WebMvcConfigurerAdapter implements CommandL
         factory.setMaxRequestSize("124MB");
         return factory.createMultipartConfig();
     }
-
-
-
 
     @Override
     public void run(String... strings) throws Exception {

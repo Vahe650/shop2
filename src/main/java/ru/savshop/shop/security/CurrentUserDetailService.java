@@ -10,7 +10,6 @@ import ru.savshop.shop.repository.UserRepository;
 
 @Service
 public class CurrentUserDetailService implements UserDetailsService {
-
     @Autowired
     private UserRepository userRepository;
 

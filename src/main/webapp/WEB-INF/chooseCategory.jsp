@@ -140,6 +140,12 @@
 					</div>
 				</div>
 			</div>
+			<tr>
+
+				<h3>${mess}</h3>
+
+
+			</tr>
 			<div class="footer">
 				<div class="footer-content">
 					<div class="row">

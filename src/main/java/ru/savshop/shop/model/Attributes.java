@@ -3,8 +3,10 @@ package ru.savshop.shop.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -18,15 +20,11 @@ public class Attributes {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private int id;
-    @Column
-    private String name;
+    @Column(name = "name")
+    private String attributeName;
     @ManyToOne
     private Category category;
-
-//    @ManyToMany(mappedBy = "atributes")
-//    private List<Post> posts;
-
-    public Attributes(int one) {
-        this.id = one;
-    }
+public Attributes(int one) {
+    this.id = one;
+}
 }

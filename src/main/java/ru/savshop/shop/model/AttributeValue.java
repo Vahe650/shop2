@@ -3,6 +3,7 @@ package ru.savshop.shop.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 @Data
@@ -16,7 +17,6 @@ public class AttributeValue {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private int id;
-
     @ManyToOne(cascade = CascadeType.MERGE)
     private Attributes atributes;
     @Column

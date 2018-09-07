@@ -7,6 +7,5 @@ import ru.savshop.shop.model.Post;
 import java.util.List;
 
 public interface AttribValueRepository extends JpaRepository<AttributeValue, Integer> {
-//    AttributeValue findAllById (int id);
     List<AttributeValue> findAllByPost(Post post);
 }

@@ -166,7 +166,7 @@
                         <div class="panel-body">
                             <c:forEach items="${atValue}" varStatus="at" var="att">
                                 <div class="form-group">
-                                    <form:label path="attributeValues[${at.index}].atributes.name">${att.atributes.name}</form:label><br>
+                                    <form:label path="attributeValues[${at.index}].atributes.attributeName">${att.atributes.attributeName}</form:label><br>
                                     <form:hidden path="attributeValues[${at.index}].atributes.id" value="${att.atributes.id}"/>
                                     <input type="hidden" name="value" value="${att.atributes.id}"/>
                                     <form:input value="${att.value}"    path="attributeValues[${at.index}].value" class="form-control"/>

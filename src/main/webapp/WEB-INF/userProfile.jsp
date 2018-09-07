@@ -277,14 +277,14 @@
                     <%--<form action="/mailSender" modelAttribute="user" method="post">--%>
                     <%--<div class="form-group">--%>
                     <%--<label for="InputEmail">Email address</label>--%>
-                    <%--<input type="email" name="body" class="form-control" id="InputEmail"--%>
+                    <%--<input type="email" attributeName="body" class="form-control" id="InputEmail"--%>
                     <%--placeholder="Enter your email">--%>
-                    <%--<input type="hidden" name="userName" value="${curentPost.user.name}">--%>
-                    <%--<input type="hidden" name="to" value="${curentPost.user.email}">--%>
+                    <%--<input type="hidden" attributeName="userName" value="${curentPost.user.attributeName}">--%>
+                    <%--<input type="hidden" attributeName="to" value="${curentPost.user.email}">--%>
                     <%--</div>--%>
                     <%--<div class="form-group">--%>
                     <%--<label for="InputText">Your text</label>--%>
-                    <%--<textarea name="text" class="form-control" id="InputText" name="message"--%>
+                    <%--<textarea attributeName="text" class="form-control" id="InputText" attributeName="message"--%>
                     <%--placeholder="Type in your message" rows="5"--%>
                     <%--style="margin-bottom:10px;"></textarea>--%>
                     <%--</div>--%>

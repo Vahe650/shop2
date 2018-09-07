@@ -41,7 +41,6 @@ public class PostController {
     private AttribValueRepository attribValueRepository;
     @Autowired
     private AttributeRepository attributeRepository;
-
     @Value("${shop.postpic.upload.path}")
     private String postImageUploadPath;
 
@@ -73,26 +72,27 @@ public class PostController {
             map.addAttribute("current", user);
         }
         map.addAttribute("allcategory", categoryRepository.findAll());
+        map.addAttribute("mess", "Please choose category");
         map.addAttribute("post", new Post());
         return "chooseCategory";
     }
 
-
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
     public String AddPost(@ModelAttribute(name = "post") Post post,
-                          @RequestParam(value = "picture") MultipartFile[] uploadingFiles
-
-    ) throws IOException {
-        CurrentUser curretUser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        post.setUser(userRepository.getOne(curretUser.getId()));
+                          @RequestParam(value = "picture") MultipartFile[] uploadingFiles,@AuthenticationPrincipal UserDetails userDetails) throws IOException {
+        if (post.getCategory()==null){
+            return "redirect:/chooseCategory";
+        }
+        if (userDetails != null) {
+            User currentUser = ((CurrentUser) userDetails).getUser();
+            post.setUser(userRepository.getOne(currentUser.getId()));
+        }
         post.setView(0);
         postRepository.save(post);
         for (AttributeValue attributeValue : post.getAttributeValues()) {
             attributeValue.setPost(post);
             attribValueRepository.save(attributeValue);
         }
-
         for (MultipartFile uploadedFile : uploadingFiles) {
             String path = System.currentTimeMillis() + "_" + uploadedFile.getOriginalFilename();
             File file = new File(postImageUploadPath + path);
@@ -130,7 +130,6 @@ public class PostController {
 
     ) throws IOException {
         CurrentUser curretUser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         post.setUser(userRepository.getOne(curretUser.getId()));
         post.setAtributes(value);
         postRepository.save(post);
@@ -143,7 +142,6 @@ public class PostController {
         if (uploadingFiles.length <= 1) {
             return "redirect:/viewDetail?id=" + post.getId();
         }
-
         for (MultipartFile uploadedFile : uploadingFiles) {
             String path = System.currentTimeMillis() + "_" + uploadedFile.getOriginalFilename();
             File file = new File(postImageUploadPath + path);
@@ -163,7 +161,6 @@ public class PostController {
         return "redirect:/viewDetail?id=" + one.getPost().getId();
     }
 
-
     @RequestMapping(value = "/post/image", method = RequestMethod.GET)
     public void getImageAsByteArray(HttpServletResponse response, @RequestParam("fileName") String fileName) throws IOException {
         InputStream in = new FileInputStream(postImageUploadPath + fileName);
@@ -171,5 +168,4 @@ public class PostController {
         response.setBufferSize(5000000);
         IOUtils.copy(in, response.getOutputStream());
     }
-
 }

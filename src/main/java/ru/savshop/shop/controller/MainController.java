@@ -21,7 +21,6 @@ import java.util.Locale;
 public class MainController {
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private PostRepository postRepository;
     @Autowired
@@ -34,16 +33,7 @@ public class MainController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String mainPage(ModelMap modelMap, @AuthenticationPrincipal UserDetails userDetails) {
-//        List<Post> byVerify=new LinkedList<>();
-//        List<Post> all = postRepository.findAll();
-//        for (Post post : all) {
-//           if (post.getUser().isVerify()){
-//               byVerify.add(post);
-//           }
-//
-//        }
         modelMap.addAttribute("allPosts",postRepository.findByUserVerify());
-
         modelMap.addAttribute("four", postRepository.lastFour());
         modelMap.addAttribute("allCategories", categoryRepository.findAll());
         modelMap.addAttribute("userDetail", userRepository.findAll());
@@ -80,7 +70,6 @@ public class MainController {
             User currentUser = ((CurrentUser) userDetails).getUser();
             modelMap.addAttribute("user", userRepository.findOne(currentUser.getId()));
         }
-
         modelMap.addAttribute("mes", mes != null ? mes: "");
         List<Post> postList = postRepository.findPostsByCategoryIdOrderByViewDesc(id);
         if (postList.isEmpty()){
@@ -90,7 +79,6 @@ public class MainController {
         modelMap.addAttribute("allCategories", categoryRepository.findAll());
         modelMap.addAttribute("allPosts",postRepository.findByUserVerify());
         modelMap.addAttribute("result", postList);
-
         return "result";
     }
     @RequestMapping(value = "/middleRange")
@@ -100,25 +88,10 @@ public class MainController {
         if (id!=categoryRepository.findOne(id).getId()){
             return "redirect:/nullErrors";
         }
-
         map.addAttribute("allPosts", postRepository.findByUserVerify());
         map.addAttribute("four", postRepository.lastFour());
         map.addAttribute("allCategories", categoryRepository.findAll());
-//        List<Post> list = postRepository.findAll();
-//        List<Post> p = new LinkedList<>();
-//        for (Post post : list) {
-//            if (post.getPrice() >= firstId & post.getPrice() <= secondId && post.getCategory().getId() == id) {
-//                p.add(post);
-//            }
-//            map.addAttribute("result", p);
-//        }
-//        if (p.isEmpty()) {
-//            map.addAttribute("mess", "There is no any posts in  " + firstId + " from " + secondId + " range");
-//        }
-//        return "result";
         List<Post> postList = postRepository.betweenPrice(firstId, secondId,id);
-
-
         if (postList.isEmpty()) {
             String mes="There is no any posts in  " + firstId + " from " + secondId + " range";
             map.addAttribute("mes", mes);
@@ -151,7 +124,6 @@ public class MainController {
         post.addAttribute("allCategories", categoryRepository.findAll());
         return "detail";
     }
-
 
     @RequestMapping(value = "/contactUs", method = RequestMethod.GET)
     public String contact(ModelMap modelMap, @AuthenticationPrincipal UserDetails userDetails) {

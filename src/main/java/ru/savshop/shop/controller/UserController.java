@@ -35,7 +35,6 @@ import java.util.List;
 public class UserController {
     @Autowired
     private EmailServiceImp emailServiceImp;
-
     @Autowired
     private PostRepository postRepository;
     @Autowired
@@ -59,7 +58,6 @@ public class UserController {
         return "login";
     }
 
-
     @RequestMapping(value = "/deletePost")
     public String del(@RequestParam("id") int id, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
@@ -74,10 +72,8 @@ public class UserController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String update(@ModelAttribute("add") User user, @RequestParam(value = "existingPassword", required = false) String existingPassword,
                          @RequestParam(value = "picture") MultipartFile file) throws IOException {
-
         String dbPassword = userRepository.getOne(user.getId()).getPassword();
         if (passwordEncoder.matches(existingPassword, dbPassword)) {
-
             user.setName(user.getName());
             user.setSurname(user.getSurname());
             user.setEmail(user.getEmail());
@@ -104,24 +100,17 @@ public class UserController {
 
     @RequestMapping(value = "/updatePass", method = RequestMethod.POST)
     public String updatePass(@ModelAttribute("add") User user,
-                             @RequestParam(value = "existingPassword", required = false) String existingPassword)
-//                             @RequestParam(value = "newPass", required = false) String newPass,
-    {
+                             @RequestParam(value = "existingPassword", required = false) String existingPassword) {
         CurrentUser currentUser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String dbPassword = userRepository.getOne(user.getId()).getPassword();
         if (passwordEncoder.matches(existingPassword, dbPassword)) {
-
             User user1 = userRepository.getOne(currentUser.getId());
-
             user1.setPassword(passwordEncoder.encode(user.getPassword()));
-
-
             userRepository.save(user1);
-            return "redirect:/userProfileDetail?id="+currentUser.getId();
+            return "redirect:/userProfileDetail?id=" + currentUser.getId();
         }
         return "redirect:/userPassError";
     }
-
 
     @RequestMapping(value = "/updateUserPassword")
     public String updateUserPassword(ModelMap map, @ModelAttribute("add") User ser1,
@@ -131,12 +120,11 @@ public class UserController {
             map.addAttribute("current", userRepository.findOne(user.getId()));
         }
         return "userPassUpdate";
-
     }
 
     @RequestMapping(value = "/userPassError")
     public String userPassError(ModelMap modelMap, @ModelAttribute("add") User user1,
-                       @AuthenticationPrincipal UserDetails userDetails) {
+                                @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User user = ((CurrentUser) userDetails).getUser();
             modelMap.addAttribute("current", userRepository.findOne(user.getId()));
@@ -154,7 +142,6 @@ public class UserController {
             map.addAttribute("allcountry", countryRepository.findAll());
         }
         return "userUpdate";
-
     }
 
     @RequestMapping(value = "/mailSender")
@@ -166,7 +153,6 @@ public class UserController {
         emailServiceImp.sendSimpleMessage(to, "Hello " + userName, "you have a message from  " + body + "\n" + text);
         return "redirect:/";
     }
-
 
     @RequestMapping(value = "/userProfileDetail", method = RequestMethod.GET)
     public String userPosts(ModelMap post, @RequestParam("id") int id, @AuthenticationPrincipal UserDetails userDetails) {
@@ -191,7 +177,6 @@ public class UserController {
             modelMap.addAttribute("errorMessage", "Password are entered incorrectly!\n Please try again");
         }
         return "userUpdate";
-
     }
 
     @RequestMapping(value = "/user/image", method = RequestMethod.GET)

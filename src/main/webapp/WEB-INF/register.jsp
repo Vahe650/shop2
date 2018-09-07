@@ -163,8 +163,7 @@
             <h2>Sign Up</h2>
             <p>
             <h2 style="color: red;">${message}</h2></p>
-            <p>
-            <h2 style="color: red;">${emailError}</h2></p>
+
             <hr>
             <div class="row">
                 <div class="col-lg-12">
@@ -175,10 +174,10 @@
                                 <div class="row">
                                     <div class="col-xs-6 col-md-6">
                                         <spring:input path="name" class="form-control" name="firstname"
-                                                      placeholder="First name" type="text"/></div>
+                                                      placeholder="Firstname" type="text"/></div>
                                     <div class="col-xs-6 col-md-6">
                                         <spring:input path="surname" class="form-control" name="firstname"
-                                                      placeholder="Last name" type="text"/></div>
+                                                      placeholder="LastName" type="text"/></div>
                                 </div>
                             </div>
                             <div class="form-group">

@@ -326,7 +326,7 @@
                         </tr>
                         <c:forEach items="${curentPost.attributeValues}" var="at">
                             <tr>
-                                <td>${at.atributes.name}</td>
+                                <td>${at.atributes.attributeName}</td>
                                 <td>${at.value}</td>
                             </tr>
                         </c:forEach>

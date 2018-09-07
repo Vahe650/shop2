@@ -32,7 +32,7 @@
         <c:if test="${user!=null}"><a href="/userProfileDetail?id=${user.id}">
             <h5 style="color: red"><u>${user.name}&nbsp;${user.surname}</u>
                 <img class="user_top_img" src="/user/image?fileName=${user.picUrl}"
-                     alt="No img" style="border-radius: 50%" ></h5>
+                     alt="No img" style="border-radius: 50%"></h5>
         </a> </c:if>
     </ul>
 </div>
@@ -52,7 +52,9 @@
             <a href="/chooseCategory" class="btn btn-success navbar-btn navbar-left add-classified-btn" role="button">Add
                 Post</a>
             <ul class="nav navbar-nav navbar-right">
-                <c:if test="${user.type== 'ADMIN'}"><li><a href="/admin">Admin Page</a></li></c:if>
+                <c:if test="${user.type== 'ADMIN'}">
+                    <li><a href="/admin">Admin Page</a></li>
+                </c:if>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -119,7 +121,8 @@
                             <%--</li>--%>
                     </ul>
                 </li>
-            </ul></c:if>
+            </ul>
+            </c:if>
         </div>
     </nav>
     <div class="row content">
@@ -137,24 +140,24 @@
                 </form>
             </div>
             <c:if test="${result.size()!=0}">
-            <h4>Price Range</h4>
-            <form action="/middleRange">
-                <div class="range">
-                    <output id="range" style="text-align:center; color:red">FROM</output>
-                    <input type="range" name="firstInt" min="0" max="100000" value="50" step="50"
-                           onchange="range.value=value">
-                    <output id="rangePrimary" style="text-align:center; color: red; ">TO</output>
-                    <input type="range" name="secondInt" min="0" max="100000" value="50" step="50"
-                           onchange="rangePrimary.value=value">
+                <h4>Price Range</h4>
+                <form action="/middleRange">
+                    <div class="range">
+                        <output id="range" style="text-align:center; color:red">FROM</output>
+                        <input type="range" name="firstInt" min="0" max="100000" value="50" step="50"
+                               onchange="range.value=value">
+                        <output id="rangePrimary" style="text-align:center; color: red; ">TO</output>
+                        <input type="range" name="secondInt" min="0" max="100000" value="50" step="50"
+                               onchange="rangePrimary.value=value">
 
-                    <input type="hidden" name="id" value="${result[0].category.id}">
+                        <input type="hidden" name="id" value="${result[0].category.id}">
 
 
-                    <button class="btn btn-primary" type="submit" style="align-items: center"><span
-                            style="align-content: center"
-                            class="glyphicon glyphicon-search"></span></button>
-                </div>
-            </form>
+                        <button class="btn btn-primary" type="submit" style="align-items: center"><span
+                                style="align-content: center"
+                                class="glyphicon glyphicon-search"></span></button>
+                    </div>
+                </form>
             </c:if>
 
 
@@ -191,7 +194,7 @@
                                 <c:if test="${one.description.length()>45}">
                                     <p>${one.description.substring(0,45)}...</p></c:if>
                                 <c:if test="${one.description.length()<45}">
-                                    <p>${one.description}...</p></c:if>                            </div>
+                                    <p>${one.description}...</p></c:if></div>
                         </div>
                     </c:forEach>
                     <p class="text-right show-more"><a href="#">More &rarr;</a></p>
@@ -202,35 +205,35 @@
 
 
             <%--<div class="hidden-xs hidden-sm hidden-md">--%>
-                <%--<h4>Newest Posts</h4>--%>
-                <%--<div class="newest-classifieds">--%>
-                    <%--<c:set var="last" value="${fn:length(allPosts)}"/>--%>
-                    <%--<c:forEach var="i" begin="1" end="3" step="1">--%>
-                        <%--<c:set var="one" value="${allPosts[last-i]}"/>--%>
-                        <%--<div class="media">--%>
-                            <%--<a class="pull-left" href="/viewDetail?id=${one.id}">--%>
-                                <%--<img class="media-object" style="width: 64px; height: 64px;"--%>
-                                     <%--src="/post/image?fileName=${one.pictures[0].picUrl}"/>--%>
-                            <%--</a>--%>
-                            <%--<div class="media-body">--%>
-                                <%--<p><a href="/viewDetail?id=${one.id}"><strong>${one.title}</strong></a></p>--%>
-                                <%--<c:if test="${one.description.length()>45}">--%>
-                                    <%--<p>${one.description.substring(0,45)}...</p></c:if>--%>
-                                <%--<c:if test="${one.description.length()<45}">--%>
-                                    <%--<p>${one.description}...</p></c:if>                            </div>--%>
-                        <%--</div>--%>
-                    <%--</c:forEach>--%>
-                    <%--<p class="text-right show-more"><a href="#">More &rarr;</a></p>--%>
-                <%--</div>--%>
+            <%--<h4>Newest Posts</h4>--%>
+            <%--<div class="newest-classifieds">--%>
+            <%--<c:set var="last" value="${fn:length(allPosts)}"/>--%>
+            <%--<c:forEach var="i" begin="1" end="3" step="1">--%>
+            <%--<c:set var="one" value="${allPosts[last-i]}"/>--%>
+            <%--<div class="media">--%>
+            <%--<a class="pull-left" href="/viewDetail?id=${one.id}">--%>
+            <%--<img class="media-object" style="width: 64px; height: 64px;"--%>
+            <%--src="/post/image?fileName=${one.pictures[0].picUrl}"/>--%>
+            <%--</a>--%>
+            <%--<div class="media-body">--%>
+            <%--<p><a href="/viewDetail?id=${one.id}"><strong>${one.title}</strong></a></p>--%>
+            <%--<c:if test="${one.description.length()>45}">--%>
+            <%--<p>${one.description.substring(0,45)}...</p></c:if>--%>
+            <%--<c:if test="${one.description.length()<45}">--%>
+            <%--<p>${one.description}...</p></c:if>                            </div>--%>
             <%--</div>--%>
-        <%--</div>--%>
-        <%--<div class="col-lg-9 content-right">--%>
+            <%--</c:forEach>--%>
+            <%--<p class="text-right show-more"><a href="#">More &rarr;</a></p>--%>
+            <%--</div>--%>
+            <%--</div>--%>
+            <%--</div>--%>
+            <%--<div class="col-lg-9 content-right">--%>
             <%--<===========================================================================================================================>--%>
             <%--<ol class="breadcrumb">--%>
-                <%--<li><a href="/">Home</a></li>--%>
-                <%--<li><a href="#">Categories</a></li>--%>
-                <%--<li><a href="#">Computers & Networking</a></li>--%>
-                <%--<li><a href="result.jsp">PC, Computers</a></li>--%>
+            <%--<li><a href="/">Home</a></li>--%>
+            <%--<li><a href="#">Categories</a></li>--%>
+            <%--<li><a href="#">Computers & Networking</a></li>--%>
+            <%--<li><a href="result.jsp">PC, Computers</a></li>--%>
             <%--</ol>--%>
             <h2>New</h2>
 
@@ -244,8 +247,8 @@
                                 <div class="caption">
                                     <h5><a href="/viewDetail?id=${one.id}">${one.title}</a></h5>
 
-                                    <p class="price"><fmt:formatNumber value="${one.price}" type = "number"
-                                                                                   maxFractionDigits = "3"></fmt:formatNumber></p>
+                                    <p class="price"><fmt:formatNumber value="${one.price}" type="number"
+                                                                       maxFractionDigits="3"></fmt:formatNumber></p>
                                 </div>
                             </div>
                         </div>
@@ -297,10 +300,11 @@
                                     </div>
                                 </td>
                                 <td class="col-sm-1 col-md-1 text-center" style="vertical-align: middle;">
-                                    <strong ><fmt:formatNumber value="${post.price}" type = "number"
-                                                               maxFractionDigits = "3"></fmt:formatNumber></strong>
-                                    </td>
-                                <td class="col-sm-1 col-md-1 text-center" style="vertical-align: middle;">${post.view}</td>
+                                    <strong><fmt:formatNumber value="${post.price}" type="number"
+                                                              maxFractionDigits="3"></fmt:formatNumber></strong>
+                                </td>
+                                <td class="col-sm-1 col-md-1 text-center"
+                                    style="vertical-align: middle;">${post.view}</td>
 
                             </tr>
                         </c:forEach>

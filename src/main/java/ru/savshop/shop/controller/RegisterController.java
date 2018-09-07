@@ -32,7 +32,6 @@ import java.util.UUID;
 
 @Controller
 public class RegisterController {
-
     @Autowired
     private CountryRepository countryRepository;
     @Autowired
@@ -51,8 +50,6 @@ public class RegisterController {
     @RequestMapping(value = "/userRegister", method = RequestMethod.GET)
     public String register(ModelMap map, @RequestParam(name = "message",
             required = false) String message) {
-
-
         map.addAttribute("message", message != null ? message : "");
         map.addAttribute("allcountry", countryRepository.findAll());
         map.addAttribute("user", new User());
@@ -62,11 +59,10 @@ public class RegisterController {
         return "register";
     }
 
-
     @RequestMapping(value = "/loginSuccess", method = RequestMethod.GET)
     public String loginSucces() {
         CurrentUser principal = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal.getUser().getType() == UserType.ADMIN) {
+        if (principal.getUser().getType().equals(UserType.ADMIN) ) {
             return "redirect:/admin";
         }
         return "redirect:/";
@@ -74,7 +70,7 @@ public class RegisterController {
 
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
     public String addUser(@Valid @ModelAttribute(name = "registerUser") User user, BindingResult result,
-                          @RequestParam(value = "picture") MultipartFile file, ModelMap map) throws IOException {
+                          @RequestParam(value = "picture") MultipartFile file) throws IOException {
         File dir = new File(imageUploadPath);
         if (!dir.exists()) {
             dir.mkdir();
@@ -114,7 +110,6 @@ public class RegisterController {
 
     @RequestMapping(value = "/forgetPassword", method = RequestMethod.GET)
     public String forgetPass (){
-
         return "forgetPass";
     }
     @RequestMapping(value = "/forget")

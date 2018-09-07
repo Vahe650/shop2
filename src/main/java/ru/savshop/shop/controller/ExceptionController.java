@@ -34,14 +34,6 @@ public class ExceptionController implements ErrorController {
 
     }
 
-    //
-//    @RequestMapping(value = {"/{name:.+}", "/{name}/{name}"}, method = RequestMethod.GET)
-//    public String viewEdit(@PathVariable("name") final String name, ModelMap model) {
-//        if (name.equals("null"))
-//            throw new NotFound();
-//        model.addAttribute("msg", "Page not found");
-//        return "404";
-//    }
     @RequestMapping(value = "/error", method = RequestMethod.GET)
     public String renderErrorPage(ModelMap map, HttpServletRequest httpRequest) throws Exception {
         String errorMsg = "";
@@ -65,8 +57,6 @@ public class ExceptionController implements ErrorController {
             }
         }
         map.addAttribute("msg", errorMsg);
-
-
         return "404";
     }
 

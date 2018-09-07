@@ -193,7 +193,7 @@
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 
 <style>
-    #divCheckPasswordMatch{color:red; font-weight:bold;}
+    #divCheckPasswordMatch{ font-weight:bold;}
 </style>
 
 <script>
@@ -202,10 +202,10 @@
         var confirmPassword = $("#txtConfirmPassword").val();
 
         if (password != confirmPassword)
-            $("#divCheckPasswordMatch").html("Passwords do not match!");
+            $("#divCheckPasswordMatch").css("color","red").html("Passwords do not match!");
 
         else
-            $("#divCheckPasswordMatch").html("Passwords match.");
+            $("#divCheckPasswordMatch").css("color","green").html("Passwords match.");
     }
 </script>
 
