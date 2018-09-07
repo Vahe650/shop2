@@ -169,8 +169,7 @@ public class PostController {
         return "redirect:/login";
     }
         @RequestMapping(value = "/post/image", method = RequestMethod.GET)
-        public void getImageAsByteArray (HttpServletResponse response, @RequestParam("fileName") String fileName) throws
-        IOException {
+        public void getImageAsByteArray (HttpServletResponse response, @RequestParam("fileName") String fileName) throws IOException {
             InputStream in = new FileInputStream(postImageUploadPath + fileName);
             response.setContentType(MediaType.IMAGE_JPEG_VALUE);
             response.setBufferSize(5000000);
