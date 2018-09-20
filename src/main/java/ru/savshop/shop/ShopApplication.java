@@ -1,43 +1,40 @@
 package ru.savshop.shop;
 
-import org.apache.catalina.connector.Connector;
-import org.apache.coyote.http11.AbstractHttp11Protocol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.UsersConnectionRepository;
+import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
+import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import ru.savshop.shop.model.Country;
 import ru.savshop.shop.model.Gender;
 import ru.savshop.shop.model.User;
 import ru.savshop.shop.model.UserType;
-import ru.savshop.shop.repository.CategoryRepository;
 import ru.savshop.shop.repository.CountryRepository;
 import ru.savshop.shop.repository.UserRepository;
+import ru.savshop.shop.security.FacebookConnectionSignup;
+import ru.savshop.shop.security.FacebookSignInAdapter;
 
 import javax.servlet.MultipartConfigElement;
-import java.util.List;
+
 import java.util.Properties;
 
 @SpringBootApplication
 @EnableAsync
+
 public class ShopApplication extends WebMvcConfigurerAdapter implements CommandLineRunner {
 
     @Value("${gmail.email}")
@@ -48,7 +45,13 @@ public class ShopApplication extends WebMvcConfigurerAdapter implements CommandL
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private FacebookConnectionSignup facebookConnectionSignup;
+    @Autowired
     private CountryRepository countryRepository;
+    @Autowired
+    private ConnectionFactoryLocator connectionFactoryLocator;
+    @Autowired
+    private UsersConnectionRepository usersConnectionRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(ShopApplication.class, args);
@@ -68,6 +71,7 @@ public class ShopApplication extends WebMvcConfigurerAdapter implements CommandL
         return bean;
     }
 
+
     @Bean(name = "mailSender")
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -81,6 +85,16 @@ public class ShopApplication extends WebMvcConfigurerAdapter implements CommandL
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.debug", "true");
         return mailSender;
+    }
+
+    @Bean
+    public ProviderSignInController providerSignInController() {
+        ((InMemoryUsersConnectionRepository) usersConnectionRepository)
+                .setConnectionSignUp(facebookConnectionSignup);
+        return new ProviderSignInController(
+                connectionFactoryLocator,
+                usersConnectionRepository,
+                new FacebookSignInAdapter());
     }
 
     @Bean

@@ -30,7 +30,7 @@ public class Post {
     private String description;
     @Column
     @NumberFormat
-    @DecimalMax("10000000000.0")@DecimalMin("0.0")
+    @DecimalMax(value = "10000000000.0",message = "price must be untill 10.000.000.000")@DecimalMin(value = "0.0",message = "price cant be 0")
     private double price;
     @Column
     private String timestamp;

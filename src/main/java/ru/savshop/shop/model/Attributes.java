@@ -24,7 +24,8 @@ public class Attributes {
     private String attributeName;
     @ManyToOne
     private Category category;
-public Attributes(int one) {
-    this.id = one;
-}
+
+    public Attributes(int one) {
+        this.id = one;
+    }
 }

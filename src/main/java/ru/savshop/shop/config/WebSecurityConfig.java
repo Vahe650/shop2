@@ -24,12 +24,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.csrf().
                 disable()
+
                 .exceptionHandling().accessDeniedPage("/accessError")
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .loginPage("/signin/facebook")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/loginSuccess")
@@ -40,10 +43,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
                 .and()
                 .authorizeRequests()
+                .antMatchers("/signin/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/post", "/updatePost", "/updateUserPassword").hasAuthority("USER")
-                .antMatchers("/changeCategory","/updateUser","/userProfileDetail","/addPost").hasAnyAuthority("USER","ADMIN")
+                .antMatchers("/changeCategory", "/updateUser", "/userProfileDetail", "/addPost").hasAnyAuthority("USER", "ADMIN")
                 .anyRequest().permitAll();
+        http.authorizeRequests().antMatchers("/siignin/facebook").access("hasRole('FB_USER')");
     }
 
     @Autowired

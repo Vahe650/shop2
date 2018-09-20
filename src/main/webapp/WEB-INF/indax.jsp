@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="../template/menucss/styles.css">
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
     <script src="../template/menucss/script.js"></script>
-
     <meta name="description" content="...">
     <meta name="keywords" content="...">
     <meta name="author" content="...">
@@ -48,7 +47,9 @@
             <a href="/chooseCategory" class="btn btn-success navbar-btn navbar-left add-classified-btn" role="button">Add
                 Post</a>
             <ul class="nav navbar-nav navbar-right">
-                <c:if test="${current.type== 'ADMIN'}"><li><a href="/admin">Admin Page</a></li></c:if>
+                <c:if test="${current.type== 'ADMIN'}">
+                    <li><a href="/admin">Admin Page</a></li>
+                </c:if>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -96,23 +97,25 @@
                                 </div>
                             </div>
                         </li>
-                            <%--<li class="divider"></li>--%>
-                            <%--<li>--%>
-                            <%--<div class="form-group">--%>
-                            <%--<button onclick="location.href='#'"--%>
-                            <%--class="btn btn-default btn-block btn-social btn-facebook"><i--%>
-                            <%--class="fa fa-facebook"></i> Sign in with Facebook--%>
-                            <%--</button>--%>
-                            <%--<button onclick="location.href='#'"--%>
-                            <%--class="btn btn-default btn-block btn-social btn-twitter"><i--%>
-                            <%--class="fa fa-twitter"></i> Sign in with Twitter--%>
-                            <%--</button>--%>
-                            <%--<button onclick="location.href='#'"--%>
-                            <%--class="btn btn-default btn-block btn-social btn-google-plus"><i--%>
-                            <%--class="fa fa-google-plus"></i> Sign in with Google--%>
-                            <%--</button>--%>
-                            <%--</div>--%>
-                            <%--</li>--%>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="form-group">
+                                <form action="/signin/facebook" method="post">
+                                    <input type="hidden" name="scope" value="public_profile"/>
+                                    <button class="btn btn-default btn-block btn-social btn-facebook">
+                                        <i class="fa fa-facebook"></i> Sign in with Facebook
+                                    </button>
+                                </form>
+                                <button onclick="location.href='#'"
+                                        class="btn btn-default btn-block btn-social btn-twitter"><i
+                                        class="fa fa-twitter"></i> Sign in with Twitter
+                                </button>
+                                <button onclick="location.href='#'"
+                                        class="btn btn-default btn-block btn-social btn-google-plus"><i
+                                        class="fa fa-google-plus"></i> Sign in with Google
+                                </button>
+                            </div>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -188,11 +191,9 @@
                 </div>
             </div>
 
-            <h4>Recommended</h4>
+            <h4>Recommended BY admin</h4>
             <div class="row selected-classifieds">
-                <c:set var="last" value="${fn:length(allPosts)}"/>
-                <c:forEach var="i" begin="1" end="${last}" step="1">
-                    <c:set var="one" value="${allPosts[last-i]}"/>
+                <c:forEach var="one" items="${allPosts}">
                     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
                         <a href="/viewDetail?id=${one.id}">
                             <div class="thumbnail">

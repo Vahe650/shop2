@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Category findCategoryById (int id);
-    @Query(value = "SELECT * FROM category c JOIN category d  ON  c.`parent_id`=d.`id`  ORDER BY c.`parent_id` ",nativeQuery = true)
+    @Query(value = "SELECT * FROM category c JOIN category d ON c.`id`=d.`parent_id`  ",nativeQuery = true)
     List<Category> allCategoriesOrOrderByParentId();
+
 }

@@ -31,6 +31,7 @@ public class MainController {
     private AttribValueRepository attribValueRepository;
 
 
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String mainPage(ModelMap modelMap, @AuthenticationPrincipal UserDetails userDetails) {
         modelMap.addAttribute("allPosts",postRepository.findByUserVerify());
@@ -156,6 +157,7 @@ public class MainController {
         modelMap.addAttribute("allCategories", categoryRepository.findAll());
         return "help";
     }
+
 
     @RequestMapping(value = "/userConditions", method = RequestMethod.GET)
     public String conditions(ModelMap modelMap, @AuthenticationPrincipal UserDetails userDetails) {

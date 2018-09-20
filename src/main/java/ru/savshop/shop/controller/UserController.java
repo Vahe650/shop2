@@ -3,7 +3,6 @@ package ru.savshop.shop.controller;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.savshop.shop.handler.CustomFailureHandler;
 import ru.savshop.shop.mail.EmailServiceImp;
 import ru.savshop.shop.model.Post;
 import ru.savshop.shop.model.User;
@@ -23,17 +21,12 @@ import ru.savshop.shop.model.UserType;
 import ru.savshop.shop.repository.*;
 import ru.savshop.shop.security.CurrentUser;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.AccessDeniedException;
-import java.util.LinkedList;
-import java.util.List;
 
 @Controller(value = "/user/")
 public class UserController {
@@ -57,11 +50,8 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(ModelMap map) {
         map.addAttribute("allcountry", countryRepository.findAll());
-        map.addAttribute("user", new User());
-
         return "login";
     }
-
     @RequestMapping(value = "/deletePost")
     public String del(@RequestParam("id") int id, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {

@@ -25,161 +25,172 @@
 </head>
 
 <div>
-<div class="container wrapper">
-    <div class="logo"><a href="/"><img src="../template/img/czsale-logo.png" alt="CZSale" title="CZSale"/></a></div>
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#czsale-navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse" id="czsale-navbar">
-            <a href="/chooseCategory" class="btn btn-success navbar-btn navbar-left add-classified-btn" role="button">Add
-                Post</a>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/userHelp">Help</a></li>
-            </ul>
-        </div>
-    </nav>
-    <div class="row content">
-        <div class="col-lg-3 content-left">
+    <div class="container wrapper">
+        <div class="logo"><a href="/"><img src="../template/img/czsale-logo.png" alt="CZSale" title="CZSale"/></a></div>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#czsale-navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="czsale-navbar">
+                <a href="/chooseCategory" class="btn btn-success navbar-btn navbar-left add-classified-btn"
+                   role="button">Add
+                    Post</a>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/userHelp">Help</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="row content">
+            <div class="col-lg-3 content-left">
 
-            <h4>Search</h4>
-            <div class="well well-sm">
-                <form action="/admin/searchUser" method="get">
-                    <div class="input-group">
-                        <input name="search" type="text" class="form-control"
-                               placeholder="What are you looking for?">
-                        <span class="input-group-btn">
+                <h4>Search</h4>
+                <div class="well well-sm">
+                    <form action="/admin/searchUser" method="get">
+                        <div class="input-group">
+                            <input name="search" type="text" class="form-control"
+                                   placeholder="What are you looking for?">
+                            <span class="input-group-btn">
             <button class="btn btn-primary" type="submit"><span
                     class="glyphicon glyphicon-search"></span></button>
             </span>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-9 content-right">
+            <div class="row">
+                <div class="col-md-112">
+
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Add Parent Category:</h3>
+                            <h2 style="color: red;">${message}</h2></p>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <spring:form action="/admin/addCategory" method="post"
+                                             modelAttribute="category">
+                                    <spring:label path="name">Name:</spring:label>
+                                    <spring:input class="form-control" path="name"></spring:input><br>
+                                    <input class="btn btn-success btn-block" type="submit" value="ADD">
+
+                                </spring:form>
+                            </div>
+                        </div>
                     </div>
-                </form>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Add Parent Category and her Attributes:</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <spring:form action="/admin/addParrentCategoryAndAtribute" method="post"
+                                             modelAttribute="categories">
+                                    <spring:label path="name">Input Child category </spring:label>
+                                    <spring:input class="form-control" path="name"></spring:input><br>
+
+                                    <spring:select path="parentId" class="form-control"
+                                                   placeholder="Select Country" itemLabel="name">
+                                        <c:forEach items="${allCategories}" var="category">
+                                            <c:if test="${category.parentId==0}" var="no">
+                                                <c:set var="any" value="${category}"></c:set>
+                                                <spring:option value="${any.id}"
+                                                               cssStyle="color: red">${any.name}</spring:option>
+                                            </c:if>
+                                            <c:forEach items="${allCategories}" var="child">
+                                                <c:if test="${category.id==child.parentId}" var="yes">
+                                                    <c:set var="count" value="${child}"></c:set>
+                                                    <spring:option disabled="${yes}" value="${count.id}"
+                                                                   cssStyle="color: green">${count.name}</spring:option>
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:forEach>
+                                    </spring:select>
+                                    <br>
+
+
+                                    <spring:label path="name">Attributes</spring:label>
+                                    <button onclick="addAttribute()" class="btn btn-success btn-block"
+                                            type="button">Add Attribute line
+                                    </button>
+                                    <br>
+                                    <div id="attributeBlock">
+                                        <input class="form-control" type="text" name="atributes"
+                                               placeholder="attribute"/>
+                                    </div>
+                                    <br>
+                                    <input class="btn btn-success btn-block" type="submit" value="ADD">
+                                </spring:form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"> Add Country:</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <spring:form action="/admin/addCountry" method="post"
+                                             modelAttribute="country">
+
+                                    <spring:label path="name">Name:</spring:label><br>
+                                    <spring:input class="form-control" path="name"></spring:input><br>
+                                    <input class="btn btn-success btn-block" type="submit" value="ADD">
+                                </spring:form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"> Add Child Country:</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <spring:form action="/admin/addCountry" method="post"
+                                             modelAttribute="country">
+
+                                    <spring:label path="name">Name:</spring:label>
+                                    <spring:input class="form-control" path="name"></spring:input><br>
+                                    <%--<spring:select class="form-control" path="parentId"--%>
+                                    <%--items="${allCountries}"--%>
+                                    <%--itemLabel="attributeName"></spring:select><br>--%>
+                                    <spring:select path="parentId" class="form-control"
+                                                   placeholder="Select Country" itemLabel="name">
+                                        <c:forEach items="${allCountries}" var="country">
+                                            <c:if test="${country.parentId==0}" var="yes">
+                                                <c:set var="any" value="${country}"></c:set>
+                                                <spring:option lang="50" value="${any.id}"
+                                                               cssStyle="color:green;"><i>${any.name}</i></spring:option>
+                                            </c:if>
+                                            <c:forEach items="${allCountries}" var="childCountry">
+                                            <c:if test="${country.id==childCountry.parentId}" var="no">
+                                                <c:set var="count" value="${childCountry}"></c:set>
+                                                <spring:option disabled="${no}" value="${count.id} "
+                                                               cssStyle="color: red">
+                                                    <h2>${count.name}</h2></spring:option>
+                                            </c:if>
+                                            </c:forEach>
+                                        </c:forEach>
+                                    </spring:select>
+                                    <input class="btn btn-success btn-block" type="submit" value="ADD">
+                                </spring:form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
         </div>
     </div>
-    <div class="col-lg-9 content-right">
-    <div class="row">
-        <div class="col-md-112">
-
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Add Parent Category:</h3>
-                        <h2 style="color: red;">${message}</h2></p>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <spring:form action="/admin/addCategory" method="post"
-                                         modelAttribute="category">
-                                <spring:label path="name">Name:</spring:label>
-                                <spring:input class="form-control" path="name"></spring:input><br>
-                                <input class="btn btn-success btn-block" type="submit" value="ADD">
-
-                            </spring:form>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Add Parent Category and her Attributes:</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <spring:form action="/admin/addParrentCategoryAndAtribute" method="post"
-                                         modelAttribute="categories">
-                                <spring:label path="name">Input Child category </spring:label>
-                                <spring:input class="form-control" path="name"></spring:input><br>
-
-                                <spring:select path="parentId" class="form-control"
-                                               placeholder="Select Country" itemLabel="name">
-                                    <c:forEach items="${allCategories}" var="category">
-                                        <c:if test="${category.parentId!=0}" var="yes">
-                                            <c:set var="count" value="${category}"></c:set>
-                                            <spring:option disabled="${yes}"  value="${count.id}" cssStyle="color: green">${count.name}</spring:option>
-                                        </c:if>
-                                        <c:if test="${category.parentId==0}" var="no">
-                                            <c:set var="any" value="${category}"></c:set>
-                                            <spring:option  value="${any.id}" cssStyle="color: red" >${any.name}</spring:option>
-                                        </c:if>
-                                    </c:forEach>
-                                </spring:select>
-                                <br>
-
-
-                                <spring:label path="name">Attributes</spring:label>
-                                <button onclick="addAttribute()" class="btn btn-success btn-block"
-                                        type="button">Add Attribute line
-                                </button>
-                                <br>
-                                <div id="attributeBlock">
-                                    <input class="form-control" type="text" name="atributes"
-                                           placeholder="attribute"/>
-                                </div>
-                                <br>
-                                <input class="btn btn-success btn-block" type="submit" value="ADD">
-                            </spring:form>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"> Add Country:</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <spring:form action="/admin/addCountry" method="post"
-                                         modelAttribute="country">
-
-                                <spring:label path="name">Name:</spring:label><br>
-                                <spring:input class="form-control" path="name"></spring:input><br>
-                                <input class="btn btn-success btn-block" type="submit" value="ADD">
-                            </spring:form>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"> Add Child Country:</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <spring:form action="/admin/addCountry" method="post"
-                                         modelAttribute="country">
-
-                                <spring:label path="name">Name:</spring:label>
-                                <spring:input class="form-control" path="name"></spring:input><br>
-                                <%--<spring:select class="form-control" path="parentId"--%>
-                                               <%--items="${allCountries}"--%>
-                                               <%--itemLabel="attributeName"></spring:select><br>--%>
-                                <spring:select path="parentId" class="form-control"
-                                               placeholder="Select Country" itemLabel="name">
-                                <c:forEach items="${allCountries}" var="country">
-                                <c:if test="${country.parentId!=0}" var="no">
-                                    <c:set var="count" value="${country}"></c:set>
-                                    <spring:option disabled="${no}" value="${count.id} " cssStyle="color: red"><h2>${count.name}</h2></spring:option>
-                                </c:if>
-                                <c:if test="${country.parentId==0}" var="yes">
-                                    <c:set var="any" value="${country}"></c:set>
-                                    <spring:option lang="50" value="${any.id}" cssStyle="color:green;"><i>${any.name}</i></spring:option>
-                                </c:if>
-                                </c:forEach>
-                                </spring:select>
-                                <input class="btn btn-success btn-block" type="submit" value="ADD">
-                            </spring:form>
-                        </div>
-                    </div>
-                </div>
-
-        </div>
-    </div>
-
-</div>
-</div>
 </div>
 <div class="footer">
     <div class="footer-content">
@@ -197,7 +208,8 @@
             </div>
         </div>
     </div>
-</div></div>
+</div>
+</div>
 </div>
 <!-- JavaScript -->
 

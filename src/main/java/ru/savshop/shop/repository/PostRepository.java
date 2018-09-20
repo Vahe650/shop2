@@ -36,6 +36,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query(value = "select * from  post JOIN USER ON user.`id`=post.`user_id` AND user.`verify`=TRUE  order by post.`id` Desc limit 4 ", nativeQuery = true)
     List<Post> lastFour();
 
-    @Query(value = "SELECT * FROM Post  JOIN USER ON user.`id`=post.`user_id` AND user.`verify`=TRUE ORDER BY post.`id` asc", nativeQuery = true)
+    @Query(value = "SELECT * FROM Post  JOIN USER ON user.`id`=post.`user_id` AND user.`verify`=TRUE ORDER BY post.`id` DESC ", nativeQuery = true)
     List<Post> findByUserVerify();
 }

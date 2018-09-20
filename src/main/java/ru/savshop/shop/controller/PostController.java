@@ -21,8 +21,6 @@ import ru.savshop.shop.security.CurrentUser;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
-import java.text.DecimalFormat;
-import java.util.LinkedList;
 import java.util.List;
 
 @Controller

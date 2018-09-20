@@ -1,6 +1,7 @@
 package ru.savshop.shop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -38,18 +39,18 @@ public class AdminController {
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String adminPage(ModelMap map, @RequestParam(name = "message",
             required = false) String message) {
-        List<Category> categories = new LinkedList<>();
-        for (Category category : categoryRepository.findAll()) {
-            if (category.getParentId() == 0) {
-                categories.add(category);
-            }
-            for (Category category1 : categoryRepository.findAll()) {
-                    if (category.getId() == category1.getParentId()) {
-                        categories.add(category1);
-                    }
-                }
-            }
-        map.addAttribute("allCategories", categories);
+//        List<Category> categories = new LinkedList<>();
+//        for (Category category : categoryRepository.findAll()) {
+//            if (category.getParentId() == 0) {
+//                categories.add(category);
+//            }
+//            for (Category category1 : categoryRepository.findAll()) {
+//                    if (category.getId() == category1.getParentId()) {
+//                        categories.add(category1);
+//                    }
+//                }
+//            }
+        map.addAttribute("allCategories", categoryRepository.findAll());
         map.addAttribute("message", message != null ? message : "");
         map.addAttribute("category", new Category());
         map.addAttribute("categories", new Category());

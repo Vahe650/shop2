@@ -254,10 +254,10 @@
                                                     </a></c:if>
                                                 <li data-target="#carousel-detail-classified" data-slide-to="<%=a++%>"/>
 
-                                                        <img src="/post/image?fileName=${smallPic.picUrl}"
-                                                             class="img-responsive"/>
-                                                        <div class="caption">
-                                                        </div>
+                                                <img src="/post/image?fileName=${smallPic.picUrl}"
+                                                     class="img-responsive"/>
+                                                <div class="caption">
+                                                </div>
 
                                             </div>
                                         </c:forEach>
@@ -265,19 +265,19 @@
 
 
                                     <%--<c:forEach items="${curentPost.pictures}" var="smallPic">--%>
-                                        <%--<li data-target="#carousel-detail-classified" data-slide-to="<%=a++%>">--%>
-                                        <%--<img src="/post/image?fileName=${smallPic.picUrl}"--%>
-                                        <%--class="img-responsive"/>--%>
-                                        <%--</li>--%>
+                                    <%--<li data-target="#carousel-detail-classified" data-slide-to="<%=a++%>">--%>
+                                    <%--<img src="/post/image?fileName=${smallPic.picUrl}"--%>
+                                    <%--class="img-responsive"/>--%>
+                                    <%--</li>--%>
 
-                                        <%--<c:if test="${curentPost.user.id == current.id}">--%>
-                                        <%--<a href="/picDelete?id=${smallPic.id}">--%>
-                                        <%--<button class="btn btn-success">X--%>
-                                        <%--</button>--%>
-                                        <%--</a></c:if>--%>
+                                    <%--<c:if test="${curentPost.user.id == current.id}">--%>
+                                    <%--<a href="/picDelete?id=${smallPic.id}">--%>
+                                    <%--<button class="btn btn-success">X--%>
+                                    <%--</button>--%>
+                                    <%--</a></c:if>--%>
 
 
-                                        <%--</c:forEach>--%>
+                                    <%--</c:forEach>--%>
                                     <%--<li data-target="#carousel-detail-classified" data-slide-to="2">--%>
                                     <%--<img src="/post/image?fileName=${curentPost.pictures[2].picUrl}"--%>
                                     <%--class="img-responsive"/>--%>
@@ -314,7 +314,10 @@
                         </tr>
                         <tr>
                             <td>Added Date</td>
-                            <td>${curentPost.timestamp.substring(0,10)}</td>
+                            <fmt:parseDate var="parsedEmpDate" pattern="yyyy-MM-dd"
+                                           value="${curentPost.timestamp}"/>
+                            <td><fmt:formatDate value="${parsedEmpDate}" pattern="MM-dd-yy"
+                                                type="both"></fmt:formatDate></td>
                         </tr>
                         <tr>
                             <td>Category Name</td>

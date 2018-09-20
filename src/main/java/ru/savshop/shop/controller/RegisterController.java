@@ -2,7 +2,9 @@ package ru.savshop.shop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -60,9 +62,9 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "/loginSuccess", method = RequestMethod.GET)
-    public String loginSucces() {
-        CurrentUser principal = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal.getUser().getType().equals(UserType.ADMIN) ) {
+    public String loginSucces(@AuthenticationPrincipal UserDetails userDetails) {
+        User principal = ((CurrentUser) userDetails).getUser();
+        if (principal.getType().equals(UserType.ADMIN)) {
             return "redirect:/admin";
         }
         return "redirect:/";
@@ -83,9 +85,9 @@ public class RegisterController {
             return "redirect:/userRegister?message=" + sb.toString();
         }
         User userByEmailLike = userRepository.findUserByEmailLike(user.getEmail());
-        String message="this email is already used";
+        String message = "this email is already used";
         if (userByEmailLike != null) {
-            return "redirect:/userRegister?message="+message;
+            return "redirect:/userRegister?message=" + message;
         }
         if (!user.getPassword().equals(user.getConfirmPassword())) {
             return "redirect:/userRegister";
@@ -109,11 +111,12 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "/forgetPassword", method = RequestMethod.GET)
-    public String forgetPass (){
+    public String forgetPass() {
         return "forgetPass";
     }
+
     @RequestMapping(value = "/forget")
-    public String forget(@RequestParam(name = "email", required = false) String email){
+    public String forget(@RequestParam(name = "email", required = false) String email) {
         User user = userRepository.findOneByEmail(email);
         String alphaNumericString;
         int len = 8;
@@ -131,6 +134,7 @@ public class RegisterController {
         emailServiceImp.sendSimpleMessage(email, "Hello! ", text);
         return "redirect:/";
     }
+
     @RequestMapping(value = "/verify", method = RequestMethod.GET)
     public String verify(@RequestParam("token") String verifyToken, @RequestParam("email") String gmail) {
         User oneUser = userRepository.findOneByEmail(gmail);
