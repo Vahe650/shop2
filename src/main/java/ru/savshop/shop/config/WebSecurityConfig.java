@@ -45,8 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/signin/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/post", "/updatePost", "/updateUserPassword").hasAuthority("USER")
-                .antMatchers("/changeCategory", "/updateUser", "/userProfileDetail", "/addPost").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/post", "/updatePost", "/updateUserPassword").hasAnyAuthority("USER","FB_USER")
+                .antMatchers("/changeCategory", "/updateUser", "/userProfileDetail", "/addPost").hasAnyAuthority("ADMIN","USER","FB_USER")
                 .anyRequest().permitAll();
         http.authorizeRequests().antMatchers("/siignin/facebook").access("hasRole('FB_USER')");
     }
