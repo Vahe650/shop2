@@ -50,10 +50,11 @@ public class MainController {
     public String result(ModelMap modelMap, @RequestParam(name = "search", required = false) String search,@AuthenticationPrincipal UserDetails userDetails){
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("user", userRepository.findOne(currentUser.getId()));
+            modelMap.addAttribute("current", userRepository.findOne(currentUser.getId()));
         }
         modelMap.addAttribute("allPosts",postRepository.findByUserVerify());
         modelMap.addAttribute("four", postRepository.lastFour());
+        modelMap.addAttribute("check", postRepository.lastFour());
         modelMap.addAttribute("allCategories", categoryRepository.findAll());
         List<Post> postList = postRepository.findPostsByTitleLike(search.trim());
         if ( postList.isEmpty()) {
@@ -73,7 +74,7 @@ public class MainController {
         }
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("user", userRepository.findOne(currentUser.getId()));
+            modelMap.addAttribute("current", userRepository.findOne(currentUser.getId()));
         }
         modelMap.addAttribute("mes", mes != null ? mes: "");
         List<Post> postList = postRepository.findPostsByCategoryIdOrderByViewDesc(id);
@@ -92,7 +93,7 @@ public class MainController {
                          @RequestParam(name = "id") int id,@AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            map.addAttribute("user", userRepository.findOne(currentUser.getId()));
+            map.addAttribute("current", userRepository.findOne(currentUser.getId()));
         }
         if (id!=categoryRepository.findOne(id).getId()){
             return "redirect:/nullErrors";
@@ -138,7 +139,7 @@ public class MainController {
     public String contact(ModelMap modelMap, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("user", userRepository.findOne(currentUser.getId()));
+            modelMap.addAttribute("current", userRepository.findOne(currentUser.getId()));
         }
         modelMap.addAttribute("allPosts", postRepository.findByUserVerify());
         modelMap.addAttribute("four", postRepository.lastFour());

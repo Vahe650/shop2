@@ -22,9 +22,12 @@
 <div class="collapse navbar-collapse">
 	<ul class="nav navbar-nav navbar-top-right">
 		<c:if test="${current!=null}"><a href="/userProfileDetail?id=${current.id}">
-			<h5 style="color: red"><u>${current.name}&nbsp;${user.surname}</u>
+			<h5 style="color: red"><u>${current.name}&nbsp;${current.surname}</u>
 				<img class="user_top_img" src="/user/image?fileName=${current.picUrl}"
-					 alt="No img" style="border-radius: 50%" ></h5>
+					 alt="" style="border-radius: 50%">
+				<img class="user_top_img" src="${current.picUrl}"
+					 alt="" style="border-radius: 50%">
+			</h5>
 		</a> </c:if>
 	</ul>
 </div>

@@ -139,7 +139,7 @@
                     </div>
                 </form>
             </div>
-            <c:if test="${result.size()!=0}">
+            <c:if test="${result.size()>1}">
                 <h4>Price Range</h4>
                 <form action="/middleRange">
                     <div class="range">

@@ -8,6 +8,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -20,6 +22,7 @@ import ru.savshop.shop.model.User;
 import ru.savshop.shop.model.UserType;
 import ru.savshop.shop.repository.*;
 import ru.savshop.shop.security.CurrentUser;
+import ru.savshop.shop.security.FacebookConnectionSignup;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -41,6 +44,8 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
+    private FacebookConnectionSignup facebookConnectionSignup;
+    @Autowired
     private UserRepository userRepository;
     @Value("${shop.postpic.upload.path}")
     private String postImageUploadPath;
@@ -52,6 +57,7 @@ public class UserController {
         map.addAttribute("allcountry", countryRepository.findAll());
         return "login";
     }
+
     @RequestMapping(value = "/deletePost")
     public String del(@RequestParam("id") int id, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
@@ -171,7 +177,7 @@ public class UserController {
         @AuthenticationPrincipal UserDetails userDetails){
             if (userDetails != null) {
                 User currentUser = ((CurrentUser) userDetails).getUser();
-                post.addAttribute("user", userRepository.findOne(currentUser.getId()));
+                post.addAttribute("current", userRepository.findOne(currentUser.getId()));
                 post.addAttribute("posts", postRepository.findAllByUserId(currentUser.getId()));
                 post.addAttribute("allposts", postRepository.findAll());
                 post.addAttribute("four", postRepository.lastFour());

@@ -26,10 +26,13 @@
 <body>
 <div class="collapse navbar-collapse">
     <ul class="nav navbar-nav navbar-top-right">
-        <c:if test="${user!=null}"><a href="/userProfileDetail?id=${user.id}">
-            <h5 style="color: red"><u>${user.name}&nbsp;${user.surname}</u>
-                <img class="user_top_img" src="/user/image?fileName=${user.picUrl}"
-                     alt="No img" style="border-radius: 50%"></h5>
+        <c:if test="${current!=null}"><a href="/userProfileDetail?id=${current.id}">
+            <h5 style="color: red"><u>${current.name}&nbsp;${current.surname}</u>
+                <img class="user_top_img" src="/user/image?fileName=${current.picUrl}"
+                     alt="" style="border-radius: 50%">
+                <img class="user_top_img" src="${current.picUrl}"
+                     alt="" style="border-radius: 50%">
+            </h5>
         </a> </c:if>
     </ul>
 </div>
@@ -49,7 +52,7 @@
             <a href="/chooseCategory" class="btn btn-success navbar-btn navbar-left add-classified-btn" role="button">Add
                 Post</a>
             <ul class="nav navbar-nav navbar-right">
-                <c:if test="${user.type== 'ADMIN'}"><li><a href="/admin">Admin Page</a></li></c:if>
+                <c:if test="${current.type== 'ADMIN'}"><li><a href="/admin">Admin Page</a></li></c:if>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -66,8 +69,8 @@
                 <li><a href="/userRegister">Sign up</a></li>
                 <li class="dropdown">
 
-                    <c:if test="${user !=null}"><a href="/logout">Sign Out</a></c:if>
-                    <c:if test="${user ==null}">
+                    <c:if test="${current !=null}"><a href="/logout">Sign Out</a></c:if>
+                    <c:if test="${current ==null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign in<b class="caret"></b></a>
                     <ul class="dropdown-menu" style="padding: 15px;min-width: 250px;">
                         <li>
@@ -186,7 +189,8 @@
             <div class="row">
                 <div class="col-md-8">
 
-                    <img src="/user/image?fileName=${user.picUrl}" style="width: 550px">
+                    <img src="/user/image?fileName=${current.picUrl}" alt="" style="width: 550px">
+                    <img src="${current.picUrl}" alt="" style="width: 550px">
 
                 </div>
                 <div class="col-md-4">
@@ -198,34 +202,34 @@
 
                         <tr>
                             <td>Name</td>
-                            <td>${user.name}</td>
+                            <td>${current.name}</td>
                         </tr>
                         <tr>
                             <td>Surname</td>
-                            <td>${user.surname}</td>
+                            <td>${current.surname}</td>
                         </tr>
                         <tr>
                             <td>E-mail</td>
-                            <td>${user.email}</td>
+                            <td>${current.email}</td>
                         </tr>
                         <tr>
                             <td>Country</td>
-                            <td>${user.country.name}</td>
+                            <td>${current.country.name}</td>
                         </tr>
                         <tr>
                             <td>Tel.</td>
-                            <td>${user.tel1}</td>
+                            <td>${current.tel1}</td>
                         </tr>
                         <tr>
                             <td>Tel.</td>
-                            <td>${user.tel2}</td>
+                            <td>${current.tel2}</td>
                         </tr>
                         <tr>
                         </tbody>
                     </table>
                     <div class="row">
                         <div class="col-md-12">
-                            <a href="/updateUser?id=${user.id}">
+                            <a href="/updateUser?id=${current.id}">
                                 <button class="btn btn-success">Edit Profile</button>
                             </a>
                         </div>

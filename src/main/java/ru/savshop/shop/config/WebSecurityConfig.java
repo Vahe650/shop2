@@ -27,12 +27,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().
                 disable()
-
                 .exceptionHandling().accessDeniedPage("/accessError")
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .loginPage("/signin/facebook")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/loginSuccess")
@@ -40,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .rememberMe().and()
                 .logout()
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/login")
                 .and()
                 .authorizeRequests()
                 .antMatchers("/signin/**").permitAll()

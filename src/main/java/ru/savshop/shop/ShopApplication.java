@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -34,6 +35,7 @@ import java.util.Properties;
 
 @SpringBootApplication
 @EnableAsync
+
 
 public class ShopApplication extends WebMvcConfigurerAdapter implements CommandLineRunner {
 
@@ -104,6 +106,7 @@ public class ShopApplication extends WebMvcConfigurerAdapter implements CommandL
         factory.setMaxRequestSize("124MB");
         return factory.createMultipartConfig();
     }
+
 
     @Override
     public void run(String... strings) throws Exception {
