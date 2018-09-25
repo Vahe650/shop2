@@ -17,6 +17,7 @@
     <script src="../template/menucss/script.js"></script>
     <link rel="stylesheet" href="../template/css/CZSale.css" type="text/css"/>
 
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -52,7 +53,7 @@
             <a href="/chooseCategory" class="btn btn-success navbar-btn navbar-left add-classified-btn" role="button">Add
                 Post</a>
             <ul class="nav navbar-nav navbar-right">
-                <c:if test="${user.type== 'ADMIN'}">
+                <c:if test="${current.type== 'ADMIN'}">
                     <li><a href="/admin">Admin Page</a></li>
                 </c:if>
                 <li class="dropdown">
@@ -71,8 +72,8 @@
                 <li><a href="/userRegister">Sign up</a></li>
                 <li class="dropdown">
 
-                    <c:if test="${user !=null}"><a href="/logout">Sign Out</a></c:if>
-                    <c:if test="${user ==null}">
+                    <c:if test="${current !=null}"><a href="/logout">Sign Out</a></c:if>
+                    <c:if test="${current ==null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign in<b class="caret"></b></a>
                     <ul class="dropdown-menu" style="padding: 15px;min-width: 250px;">
                         <li>
@@ -129,9 +130,9 @@
         <div class="col-lg-3 content-left">
             <h4>Search</h4>
             <div class="well well-sm">
-                <form action="/searchResult" method="get">
+                <form action="/searchResult" name="Form" onsubmit="return validateForm()" method="get">
                     <div class="input-group">
-                        <input name="search" type="text" class="form-control" placeholder="What are you looking for?">
+                        <input id="a" name="search" type="text" class="form-control" placeholder="What are you looking for?">
                         <span class="input-group-btn">
 									<button class="btn btn-primary" type="submit"><span
                                             class="glyphicon glyphicon-search"></span></button>
@@ -139,7 +140,7 @@
                     </div>
                 </form>
             </div>
-            <c:if test="${result.size()>1}">
+            <c:if test="${check.get(0)==null}">
                 <h4>Price Range</h4>
                 <form action="/middleRange">
                     <div class="range">
@@ -256,8 +257,6 @@
                 </div>
             </div>
             <hr>
-
-
             <div class="row classifieds-table">
                 <div class="col-lg-12">
                     <table class="table table-hover">
@@ -267,15 +266,10 @@
                             <th class="text-center">Price</th>
                             <th class="text-center">Views</th>
                         </tr>
-
                         </thead>
-
                         <tbody>
                         <tr>
-
                             <h3>${mes}</h3>
-
-
                         </tr>
                         <c:forEach items="${result}" var="post">
                             <tr>
@@ -347,6 +341,18 @@
     </div>
 </div>
 <!-- JavaScript -->
+<script type="text/javascript">
+    function validateForm()
+    {
+        var a=document.forms["Form"]["search"].value;
+        if (a==null || a=="")
+        {
+            alert("Please Fill Required Field");
+            return false;
+        }
+    }
+</script>
+
 <script src="../template/js/jquery-1.11.1.min.js"></script>
 <script src="../template/js/bootstrap.min.js"></script>
 <script src="../template/js/jquery.slides.min.js"></script>

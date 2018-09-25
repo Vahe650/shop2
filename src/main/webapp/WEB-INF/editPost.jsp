@@ -152,9 +152,21 @@
                         </div>
                         <div class="panel-body">
                             <div class="form-group">
-                                <spring:label path="title">Country</spring:label>
-                                <spring:select value="${cur.country}" class="form-control" path="country" items="${allcountry}"
-                                               itemLabel="name"></spring:select>
+                                <spring:select path="country" class="form-control"
+                                               placeholder="Select Country" itemLabel="name">
+                                    <c:forEach items="${allcountry}" var="country">
+                                        <c:if test="${country.parentId==0}" var="no">
+                                            <c:set var="count" value="${country}"></c:set>
+                                            <spring:option disabled="${no}" value="${count.name} " cssStyle="color: red"><h2>${count.name}</h2></spring:option>
+                                        </c:if>
+                                        <c:forEach items="${allcountry}" var="child">
+                                            <c:if test="${country.id==child.parentId}" var="yes">
+                                                <c:set var="any" value="${child}"></c:set>
+                                                <spring:option lang="50" value="${any.id}" cssStyle="color:green;"><i>${any.name}</i></spring:option>
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:forEach>
+                                </spring:select>
                             </div>
                         </div>
                     </div>

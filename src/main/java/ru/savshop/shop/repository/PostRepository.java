@@ -22,13 +22,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query(value = "SELECT * from post JOIN USER ON user.`id`=post.`user_id` AND user.`verify`=TRUE" +
             "  where category_id=:id ORDER By view DESC", nativeQuery = true)
     List<Post> findPostsByCategoryIdOrderByViewDesc(@Param("id") int id);
-
-    Post findPostsById(int id);
-
-    Post findPostByUser(User user);
-
-    Post findOneByPicturesId(Picture picture);
-
     @Query(value = "SELECT * from post JOIN USER ON user.`id`=post.`user_id` AND user.`verify`=TRUE" +
             "  where category_id=:id and price between :firstParam and :secondParam ORDER By view", nativeQuery = true)
     List<Post> betweenPrice(@Param("firstParam") double firstParam, @Param("secondParam") double secondParam, @Param("id") int id);

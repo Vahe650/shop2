@@ -80,6 +80,8 @@ public class MainController {
         List<Post> postList = postRepository.findPostsByCategoryIdOrderByViewDesc(id);
         if (postList.isEmpty()){
             modelMap.addAttribute("mes","there is no any post in '"+one.getName()+"' CATEGORY");
+            modelMap.addAttribute("check", postRepository.lastFour());
+
         }
         modelMap.addAttribute("four",postRepository.lastFour());
         modelMap.addAttribute("allCategories", categoryRepository.findAll());
@@ -114,24 +116,24 @@ public class MainController {
     }
 
     @RequestMapping(value = "/viewDetail", method = RequestMethod.GET)
-    public String viewDetail(ModelMap post, @RequestParam(name = "id", required = false) int id,
+    public String viewDetail(ModelMap map, @RequestParam(name = "id", required = false) int id,
                              @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            post.addAttribute("current", currentUser);
+            map.addAttribute("current", currentUser);
         }
-        Post post1 = postRepository.findPostsById(id);
-        if (post1==null){
+        Post post = postRepository.findOne(id);
+        if (post==null){
             return "redirect:/nullErrors";
         }
-        int view = post1.getView();
-        post1.setView(++view);
-        postRepository.save(post1);
-        post1.setAttributeValues(attribValueRepository.findAllByPost(post1));
-        post.addAttribute("curentPost", post1);
-        post.addAttribute("allPosts",postRepository.findByUserVerify());
-        post.addAttribute("four", postRepository.lastFour());
-        post.addAttribute("allCategories", categoryRepository.findAll());
+        int view = post.getView();
+        post.setView(++view);
+        postRepository.save(post);
+        post.setAttributeValues(attribValueRepository.findAllByPost(post));
+        map.addAttribute("curentPost", post);
+        map.addAttribute("allPosts",postRepository.findByUserVerify());
+        map.addAttribute("four", postRepository.lastFour());
+        map.addAttribute("allCategories", categoryRepository.findAll());
         return "detail";
     }
 

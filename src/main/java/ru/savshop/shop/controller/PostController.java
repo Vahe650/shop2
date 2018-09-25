@@ -116,18 +116,17 @@ public class PostController {
     }
 
     @RequestMapping(value = "/updatePost", method = RequestMethod.GET)
-    public String updatePost(ModelMap map,
-                             @ModelAttribute(name = "post") Post post, @AuthenticationPrincipal UserDetails userDetails) {
+    public String updatePost(ModelMap map, @ModelAttribute(name = "post") Post post,
+                             @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User user = ((CurrentUser) userDetails).getUser();
             map.addAttribute("current", user);
         }
-        Post post1 = postRepository.findPostsById(post.getId());
+        Post post1 = postRepository.findOne(post.getId());
         List<AttributeValue> allByPost = attribValueRepository.findAllByPost(post1);
         map.addAttribute("cur", post1);
         map.addAttribute("allcountry", countryRepository.findAll());
         map.addAttribute("postCategory", categoryRepository.findCategoryById(post1.getCategory().getId()));
-        map.addAttribute("post", new Post());
         map.addAttribute("all", allByPost);
         map.addAttribute("atribute", attributeRepository.findAllByCategory(post1.getCategory()));
         map.addAttribute("atValue", attribValueRepository.findAllByPost(post1));
