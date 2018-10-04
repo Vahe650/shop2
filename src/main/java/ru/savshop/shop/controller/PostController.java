@@ -48,7 +48,7 @@ public class PostController {
     @RequestMapping(value = "/post", method = RequestMethod.GET)
     public String adminPage(ModelMap map,
                             @ModelAttribute(name = "post") Post post,
-                            @RequestParam(name = "categ",required = false) Integer id,@RequestParam(name = "message",required = false) String message, @AuthenticationPrincipal UserDetails userDetails) {
+                            @RequestParam(name = "categ", required = false) Integer id, @RequestParam(name = "message", required = false) String message, @AuthenticationPrincipal UserDetails userDetails) {
 
         if (userDetails != null) {
             User user = ((CurrentUser) userDetails).getUser();
@@ -81,14 +81,14 @@ public class PostController {
     }
 
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
-    public String AddPost(@Valid @ModelAttribute(name = "post") Post post,BindingResult result,
+    public String AddPost(@Valid @ModelAttribute(name = "post") Post post, BindingResult result,
                           @RequestParam(value = "picture") MultipartFile[] uploadingFiles, @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         StringBuilder sb = new StringBuilder();
         if (result.hasErrors()) {
             for (ObjectError objectError : result.getAllErrors()) {
                 sb.append(objectError.getDefaultMessage()).append("<br>");
             }
-            return "redirect:/post?categ="+post.getCategory().getId()+"&message=" + sb.toString();
+            return "redirect:/post?categ=" + post.getCategory().getId() + "&message=" + sb.toString();
         }
         if (post.getCategory() == null) {
             return "redirect:/chooseCategory";
@@ -151,14 +151,19 @@ public class PostController {
         if (uploadingFiles.length <= 1) {
             return "redirect:/viewDetail?id=" + post.getId();
         }
-        for (MultipartFile uploadedFile : uploadingFiles) {
-            String path = System.currentTimeMillis() + "_" + uploadedFile.getOriginalFilename();
-            File file = new File(postImageUploadPath + path);
-            uploadedFile.transferTo(file);
-            Picture picture = new Picture();
-            picture.setPicUrl(path);
-            picture.setPost(post);
-            pictureRepository.save(picture);
+        File dir = new File(postImageUploadPath);
+        if (!dir.exists()) {
+            if (dir.mkdir()) {
+                for (MultipartFile uploadedFile : uploadingFiles) {
+                    String path = System.currentTimeMillis() + "_" + uploadedFile.getOriginalFilename();
+                    File file = new File(postImageUploadPath + path);
+                    uploadedFile.transferTo(file);
+                    Picture picture = new Picture();
+                    picture.setPicUrl(path);
+                    picture.setPost(post);
+                    pictureRepository.save(picture);
+                }
+            }
         }
         return "redirect:/viewDetail?id=" + post.getId();
     }
@@ -177,11 +182,12 @@ public class PostController {
         }
         return "redirect:/login";
     }
-        @RequestMapping(value = "/post/image", method = RequestMethod.GET)
-        public void getImageAsByteArray (HttpServletResponse response, @RequestParam("fileName") String fileName) throws IOException {
-            InputStream in = new FileInputStream(postImageUploadPath + fileName);
-            response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-            response.setBufferSize(5000000);
-            IOUtils.copy(in, response.getOutputStream());
-        }
+
+    @RequestMapping(value = "/post/image", method = RequestMethod.GET)
+    public void getImageAsByteArray(HttpServletResponse response, @RequestParam("fileName") String fileName) throws IOException {
+        InputStream in = new FileInputStream(postImageUploadPath + fileName);
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        response.setBufferSize(5000000);
+        IOUtils.copy(in, response.getOutputStream());
     }
+}

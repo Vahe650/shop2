@@ -45,7 +45,7 @@
                 <li><a href="/userRegister">Sign Up</a></li>
             </ol>
 
-            <h2>Sign Up</h2>
+            <h2>Sign In</h2>
             <h4 style="color: red">${errorMessage}</h4>
             <hr>
 

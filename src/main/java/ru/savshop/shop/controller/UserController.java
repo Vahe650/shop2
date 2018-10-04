@@ -31,7 +31,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-@Controller(value = "/user/")
+@Controller(value = "/user")
 public class UserController {
     @Autowired
     private EmailServiceImp emailServiceImp;
@@ -43,8 +43,6 @@ public class UserController {
     private CountryRepository countryRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private FacebookConnectionSignup facebookConnectionSignup;
     @Autowired
     private UserRepository userRepository;
     @Value("${shop.postpic.upload.path}")
@@ -74,19 +72,14 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/userUpdate", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute("add") User user, BindingResult result,
                          @RequestParam(value = "existingPassword", required = false) String existingPassword,
                          @RequestParam(value = "picture") MultipartFile file) throws IOException {
 
             String dbPassword = userRepository.getOne(user.getId()).getPassword();
             if (passwordEncoder.matches(existingPassword, dbPassword)) {
-                user.setName(user.getName());
-                user.setSurname(user.getSurname());
-                user.setEmail(user.getEmail());
-                user.setTel1(user.getTel1());
-                user.setTel2(user.getTel2());
-                user.setCountry(user.getCountry());
+
                 if (file.isEmpty()) {
                     user.setPicUrl(userRepository.findOne(user.getId()).getPicUrl());
                 } else {
@@ -98,7 +91,7 @@ public class UserController {
                 user.setPassword(passwordEncoder.encode(existingPassword));
                 user.setVerify(true);
                 user.setType(UserType.USER);
-                user.setGender(userRepository.getOne(user.getId()).getGender());
+                user.setToken("");
                 StringBuilder sb = new StringBuilder();
                 if (result.hasErrors()) {
                     for (ObjectError objectError : result.getAllErrors()) {
@@ -130,7 +123,7 @@ public class UserController {
         }
 
         @RequestMapping(value = "/updateUserPassword")
-        public String updateUserPassword (ModelMap map, @ModelAttribute("add") User ser1,
+        public String updateUserPassword (ModelMap map, @ModelAttribute("add") User user1,
                 @AuthenticationPrincipal UserDetails userDetails){
             if (userDetails != null) {
                 User user = ((CurrentUser) userDetails).getUser();

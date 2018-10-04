@@ -73,10 +73,7 @@ public class RegisterController {
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
     public String addUser(@Valid @ModelAttribute(name = "registerUser") User user, BindingResult result,
                           @RequestParam(value = "picture") MultipartFile file) throws IOException {
-        File dir = new File(imageUploadPath);
-        if (!dir.exists()) {
-            dir.mkdir();
-        }
+
         StringBuilder sb = new StringBuilder();
         if (result.hasErrors()) {
             for (ObjectError objectError : result.getAllErrors()) {
@@ -92,10 +89,16 @@ public class RegisterController {
         if (!user.getPassword().equals(user.getConfirmPassword())) {
             return "redirect:/userRegister";
         }
-        String picName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        File picture = new File(imageUploadPath + picName);
-        file.transferTo(picture);
-        user.setPicUrl(picName);
+        File dir = new File(imageUploadPath);
+        if (!dir.exists()) {
+            if (dir.mkdir()) {
+                String picName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                File picture = new File(imageUploadPath + picName);
+                file.transferTo(picture);
+                user.setPicUrl(picName);
+
+            }
+        }
         user.setToken(UUID.randomUUID().toString());
         String url = String.format("http://localhost:8080/verify?token=%s&email=%s", user.getToken(), user.getEmail());
         String text = String.format("hello %s you are registred, click " +

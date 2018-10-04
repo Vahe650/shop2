@@ -16,7 +16,6 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "user",uniqueConstraints = {
         @UniqueConstraint(columnNames = {"email"}) })
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

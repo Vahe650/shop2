@@ -26,8 +26,6 @@ public class MainController {
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
-    private CountryRepository countryRepository;
-    @Autowired
     private AttribValueRepository attribValueRepository;
 
 

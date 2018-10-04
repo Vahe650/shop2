@@ -124,7 +124,7 @@
         </div>
     </nav>
 
-    <spring:form action="/add" method="post" modelAttribute="add" enctype="multipart/form-data">
+    <spring:form action="/userUpdate" method="post" modelAttribute="add" enctype="multipart/form-data">
         <div class="row content">
             <div class="col-lg-9 content-right">
                 <ol class="breadcrumb">
