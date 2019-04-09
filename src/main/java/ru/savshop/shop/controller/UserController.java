@@ -90,7 +90,8 @@ public class UserController {
                 }
                 user.setPassword(passwordEncoder.encode(existingPassword));
                 user.setVerify(true);
-                user.setType(UserType.USER);
+                user.setType(user.getType());
+                user.setGender(user.getGender());
                 user.setToken("");
                 StringBuilder sb = new StringBuilder();
                 if (result.hasErrors()) {
@@ -165,19 +166,19 @@ public class UserController {
             return "redirect:/";
         }
 
-        @RequestMapping(value = "/userProfileDetail", method = RequestMethod.GET)
-        public String userPosts (ModelMap post,@RequestParam("id") int id,
-        @AuthenticationPrincipal UserDetails userDetails){
-            if (userDetails != null) {
-                User currentUser = ((CurrentUser) userDetails).getUser();
-                post.addAttribute("current", userRepository.findOne(currentUser.getId()));
-                post.addAttribute("posts", postRepository.findAllByUserId(currentUser.getId()));
-                post.addAttribute("allposts", postRepository.findAll());
-                post.addAttribute("four", postRepository.lastFour());
-                post.addAttribute("allCategories", categoryRepository.findAll());
-            }
-            return "userProfile";
+
+    @RequestMapping(value = "/userProfileDetail", method = RequestMethod.GET)
+    public String userPosts(ModelMap modelMap, @RequestParam("id") int id, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails != null) {
+            User currentUser = ((CurrentUser) userDetails).getUser();
+            modelMap.addAttribute("user", userRepository.findOne(currentUser.getId()));
+            modelMap.addAttribute("posts", postRepository.findAllByUserId(currentUser.getId()));
+            modelMap.addAttribute("allposts", postRepository.findAll());
+            modelMap.addAttribute("four", postRepository.lastFour());
+            modelMap.addAttribute("allCategories", categoryRepository.findAll());
         }
+        return "userProfile";
+    }
 
         @RequestMapping(value = "/userUpdatePassError")
         public String pass (ModelMap modelMap, @ModelAttribute("add") User user1,
