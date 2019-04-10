@@ -91,14 +91,15 @@ public class RegisterController {
         }
         File dir = new File(imageUploadPath);
         if (!dir.exists()) {
-            if (dir.mkdir()) {
+            dir.mkdir();
+        }
                 String picName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
                 File picture = new File(imageUploadPath + picName);
                 file.transferTo(picture);
                 user.setPicUrl(picName);
 
-            }
-        }
+
+
         user.setToken(UUID.randomUUID().toString());
         String url = String.format("http://localhost:8080/verify?token=%s&email=%s", user.getToken(), user.getEmail());
         String text = String.format("hello %s you are registred, click " +
