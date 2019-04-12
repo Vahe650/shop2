@@ -153,8 +153,10 @@ public class PostController {
         }
         File dir = new File(postImageUploadPath);
         if (!dir.exists()) {
-            if (dir.mkdir()) {
-                for (MultipartFile uploadedFile : uploadingFiles) {
+            dir.mkdir();
+        }
+
+        for (MultipartFile uploadedFile : uploadingFiles) {
                     String path = System.currentTimeMillis() + "_" + uploadedFile.getOriginalFilename();
                     File file = new File(postImageUploadPath + path);
                     uploadedFile.transferTo(file);
@@ -163,8 +165,8 @@ public class PostController {
                     picture.setPost(post);
                     pictureRepository.save(picture);
                 }
-            }
-        }
+
+
         return "redirect:/viewDetail?id=" + post.getId();
     }
 

@@ -28,10 +28,14 @@
     <ul class="nav navbar-nav navbar-top-right">
         <c:if test="${current!=null}"><a href="/userProfileDetail?id=${current.id}">
             <h5 style="color: red"><u>${current.name}&nbsp;${current.surname}</u>
-                <img class="user_top_img" src="/user/image?fileName=${current.picUrl}"
-                     alt="" style="border-radius: 50%">
-                <img class="user_top_img" src="${current.picUrl}"
-                     alt="" style="border-radius: 50%">
+                <c:if test="${current.type=='USER'}">
+                    <img class="user_top_img" src="/user/image?fileName=${current.picUrl}"
+                         alt="" style="border-radius: 50%">
+                </c:if>
+                <c:if test="${current.type=='FB_USER'}">
+                    <img class="user_top_img" src="${current.picUrl}"
+                         alt="" style="border-radius: 50%">
+                </c:if>
             </h5>
         </a> </c:if>
     </ul>
@@ -52,7 +56,9 @@
             <a href="/chooseCategory" class="btn btn-success navbar-btn navbar-left add-classified-btn" role="button">Add
                 Post</a>
             <ul class="nav navbar-nav navbar-right">
-                <c:if test="${current.type== 'ADMIN'}"><li><a href="/admin">Admin Page</a></li></c:if>
+                <c:if test="${current.type== 'ADMIN'}">
+                    <li><a href="/admin">Admin Page</a></li>
+                </c:if>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -119,7 +125,8 @@
                             <%--</li>--%>
                     </ul>
                 </li>
-            </ul></c:if>
+            </ul>
+            </c:if>
         </div>
     </nav>
     <div class="row content">
@@ -189,8 +196,12 @@
             <div class="row">
                 <div class="col-md-8">
 
-                    <img src="/user/image?fileName=${current.picUrl}" alt="" style="width: 550px">
-                    <img src="${current.picUrl}" alt="" style="width: 550px">
+                    <c:if test="${current.type=='USER'}">
+                        <img src="/user/image?fileName=${current.picUrl}" alt="" style="width: 550px">
+                    </c:if>
+                    <c:if test="${current.type=='FB_USER'}">
+                        <img src="${current.picUrl}" alt="" style="width: 550px">
+                    </c:if>
 
                 </div>
                 <div class="col-md-4">

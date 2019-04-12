@@ -7,6 +7,7 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Service;
+import ru.savshop.shop.controller.RegisterController;
 import ru.savshop.shop.model.Gender;
 import ru.savshop.shop.model.User;
 import ru.savshop.shop.model.UserType;
@@ -24,7 +25,6 @@ public class FacebookConnectionSignup implements ConnectionSignUp {
 
 
 
-
     @Override
     public String execute(Connection<?> connection) {
         Facebook facebook = (Facebook) connection.getApi();
@@ -37,6 +37,11 @@ public class FacebookConnectionSignup implements ConnectionSignUp {
                 "video_upload_limits", "viewer_can_send_gift", "website", "work"};
         org.springframework.social.facebook.api.User userProfile = facebook.fetchObject("me", org.springframework.social.facebook.api.User.class, fields);
         User user=new User();
+        User userByEmailLike = userRepository.findUserByEmailLike(userProfile.getLastName().concat("@gmail.com"));
+        String message = "this email is already used";
+        if (userByEmailLike != null) {
+            return "redirect:/userRegister?message=" + message;
+        }
         user.setEmail(userProfile.getLastName().concat("@gmail.com"));
         user.setName(userProfile.getFirstName());
         user.setSurname(userProfile.getLastName());
@@ -49,4 +54,5 @@ public class FacebookConnectionSignup implements ConnectionSignUp {
         userRepository.save(user);
         return user.getEmail();
     }
+
 }
