@@ -82,7 +82,7 @@ public class RegisterController {
             return "redirect:/userRegister?message=" + sb.toString();
         }
         User userByEmailLike = userRepository.findUserByEmailLike(user.getEmail());
-        String message = "this email is already used";
+        String message = "you are already used";
         if (userByEmailLike != null) {
             return "redirect:/userRegister?message=" + message;
         }

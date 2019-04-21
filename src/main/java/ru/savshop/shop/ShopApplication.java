@@ -5,22 +5,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.social.connect.ConnectionFactoryLocator;
-import org.springframework.social.connect.UsersConnectionRepository;
-import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
-import org.springframework.social.connect.web.ProviderSignInController;
+import org.springframework.social.connect.support.ConnectionFactoryRegistry;
+import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import ru.savshop.shop.model.Gender;
@@ -28,11 +25,10 @@ import ru.savshop.shop.model.User;
 import ru.savshop.shop.model.UserType;
 import ru.savshop.shop.repository.CountryRepository;
 import ru.savshop.shop.repository.UserRepository;
-import ru.savshop.shop.security.FacebookConnectionSignup;
-import ru.savshop.shop.security.FacebookSignInAdapter;
 
+
+import javax.inject.Inject;
 import javax.servlet.MultipartConfigElement;
-
 import java.util.Properties;
 
 @SpringBootApplication
@@ -41,31 +37,27 @@ import java.util.Properties;
 
 
 
-public class ShopApplication extends WebMvcConfigurerAdapter implements CommandLineRunner {
+public class ShopApplication  implements CommandLineRunner {
 
     @Value("${gmail.email}")
     private String email;
     @Value("${gmail.password}")
     private String password;
 
+
+
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private FacebookConnectionSignup facebookConnectionSignup;
+
     @Autowired
     private CountryRepository countryRepository;
-    @Autowired
-    private ConnectionFactoryLocator connectionFactoryLocator;
-    @Autowired
-    private UsersConnectionRepository usersConnectionRepository;
+    @Inject
+    private Environment environment;
+
+
 
     public static void main(String[] args) {
         SpringApplication.run(ShopApplication.class, args);
-    }
-
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
     }
 
     @Bean
@@ -93,15 +85,6 @@ public class ShopApplication extends WebMvcConfigurerAdapter implements CommandL
         return mailSender;
     }
 
-    @Bean
-    public ProviderSignInController providerSignInController() {
-        ((InMemoryUsersConnectionRepository) usersConnectionRepository)
-                .setConnectionSignUp(facebookConnectionSignup);
-        return new ProviderSignInController(
-                connectionFactoryLocator,
-                usersConnectionRepository,
-                new FacebookSignInAdapter());
-    }
 
     @Bean
     public MultipartConfigElement multipartConfigElement() {
@@ -110,6 +93,7 @@ public class ShopApplication extends WebMvcConfigurerAdapter implements CommandL
         factory.setMaxRequestSize("124MB");
         return factory.createMultipartConfig();
     }
+
 
 
     @Override
@@ -122,7 +106,7 @@ public class ShopApplication extends WebMvcConfigurerAdapter implements CommandL
                     .password(new BCryptPasswordEncoder().encode("simonyan"))
                     .name("admin")
                     .surname("admin")
-                    .country(countryRepository.findOne(12))
+                    .country(countryRepository.findById(12).get())
                     .verify(true)
                     .token("")
                     .type(UserType.ADMIN)

@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table(name = "country")
 public class Country {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private int id;
     @Column (name = "region")

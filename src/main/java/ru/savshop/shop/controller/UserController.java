@@ -8,21 +8,23 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.social.connect.Connection;
-import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.savshop.shop.mail.EmailServiceImp;
 import ru.savshop.shop.model.Post;
 import ru.savshop.shop.model.User;
-import ru.savshop.shop.model.UserType;
-import ru.savshop.shop.repository.*;
+import ru.savshop.shop.repository.CategoryRepository;
+import ru.savshop.shop.repository.CountryRepository;
+import ru.savshop.shop.repository.PostRepository;
+import ru.savshop.shop.repository.UserRepository;
 import ru.savshop.shop.security.CurrentUser;
-import ru.savshop.shop.security.FacebookConnectionSignup;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -60,9 +62,9 @@ public class UserController {
     public String del(@RequestParam("id") int id, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            Post post = postRepository.findOne(id);
+            Post post = postRepository.findById(id).get();
             if (post.getUser().getId() == currentUser.getId()) {
-                postRepository.delete(id);
+                postRepository.delete(post);
             } else {
                 return "redirect:/accessError";
             }
@@ -76,11 +78,11 @@ public class UserController {
     public String update(@Valid @ModelAttribute("add") User user, BindingResult result,
                          @RequestParam(value = "existingPassword", required = false) String existingPassword,
                          @RequestParam(value = "picture") MultipartFile file) throws IOException {
-        User existUser = userRepository.findOne(user.getId());
-        String dbPassword = userRepository.getOne(user.getId()).getPassword();
+        User existUser = userRepository.findById(user.getId()).get();
+        String dbPassword = existUser.getPassword();
         if (passwordEncoder.matches(existingPassword, dbPassword)) {
             if (file.isEmpty()) {
-                user.setPicUrl(userRepository.findOne(user.getId()).getPicUrl());
+                user.setPicUrl(existUser.getPicUrl());
             } else {
                 String picName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
                 File picture = new File(userPostImageUploadPath + picName);
@@ -129,7 +131,7 @@ public class UserController {
                                      @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User user = ((CurrentUser) userDetails).getUser();
-            map.addAttribute("current", userRepository.findOne(user.getId()));
+            map.addAttribute("current", userRepository.findById(user.getId()).get());
         }
         return "userPassUpdate";
     }
@@ -139,7 +141,7 @@ public class UserController {
                                 @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User user = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("current", userRepository.findOne(user.getId()));
+            modelMap.addAttribute("current", userRepository.findById(user.getId()).get());
             modelMap.addAttribute("errorMessage", "Password are entered incorrectly!\n Please try again");
         }
         return "userPassUpdate";
@@ -151,7 +153,7 @@ public class UserController {
         if (userDetails != null) {
             map.addAttribute("message", message != null ? message : "");
             User user = ((CurrentUser) userDetails).getUser();
-            map.addAttribute("current", userRepository.findOne(user.getId()));
+            map.addAttribute("current", userRepository.findById(user.getId()).get());
             map.addAttribute("allcountry", countryRepository.findAll());
         }
         return "userUpdate";
@@ -172,7 +174,7 @@ public class UserController {
     public String userPosts(ModelMap modelMap, @RequestParam("id") int id, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("current", userRepository.findOne(currentUser.getId()));
+            modelMap.addAttribute("current", userRepository.findById(currentUser.getId()).get());
             modelMap.addAttribute("posts", postRepository.findAllByUserId(currentUser.getId()));
             modelMap.addAttribute("allposts", postRepository.findAll());
             modelMap.addAttribute("four", postRepository.lastFour());
@@ -186,7 +188,7 @@ public class UserController {
                        @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User user = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("current", userRepository.findOne(user.getId()));
+            modelMap.addAttribute("current", userRepository.findById(user.getId()).get());
             modelMap.addAttribute("allcountry", countryRepository.findAll());
             modelMap.addAttribute("message", "Password are entered incorrectly!\n Please try again");
         }

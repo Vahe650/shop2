@@ -38,7 +38,7 @@ public class MainController {
         modelMap.addAttribute("userDetail", userRepository.findAll());
         if (userDetails != null) {
             User user = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("current", userRepository.findOne(user.getId()));
+            modelMap.addAttribute("current", userRepository.findById(user.getId()).get());
         }
         return "indax";
     }
@@ -48,7 +48,7 @@ public class MainController {
     public String result(ModelMap modelMap, @RequestParam(name = "search", required = false) String search,@AuthenticationPrincipal UserDetails userDetails){
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("current", userRepository.findOne(currentUser.getId()));
+            modelMap.addAttribute("current", userRepository.findById(currentUser.getId()).get());
         }
         modelMap.addAttribute("allPosts",postRepository.findByUserVerify());
         modelMap.addAttribute("four", postRepository.lastFour());
@@ -66,13 +66,13 @@ public class MainController {
     @RequestMapping(value = "/categorySearch", method = RequestMethod.GET)
     public String catergoryResult(ModelMap modelMap, @RequestParam(name = "id") int id,@RequestParam(name = "mes",
             required = false) String mes, @AuthenticationPrincipal UserDetails userDetails) {
-        Category one = categoryRepository.findOne(id);
+        Category one = categoryRepository.findById(id).get();
         if (one==null){
             return "redirect:/nullErrors";
         }
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("current", userRepository.findOne(currentUser.getId()));
+            modelMap.addAttribute("current",  userRepository.findById(currentUser.getId()).get());
         }
         modelMap.addAttribute("mes", mes != null ? mes: "");
         List<Post> postList = postRepository.findPostsByCategoryIdOrderByViewDesc(id);
@@ -93,9 +93,9 @@ public class MainController {
                          @RequestParam(name = "id") int id,@AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            map.addAttribute("current", userRepository.findOne(currentUser.getId()));
+            map.addAttribute("current",  userRepository.findById(currentUser.getId()).get());
         }
-        if (id!=categoryRepository.findOne(id).getId()){
+        if (id!=categoryRepository.findById(id).get().getId()){
             return "redirect:/nullErrors";
         }
         map.addAttribute("allPosts", postRepository.findByUserVerify());
@@ -120,7 +120,7 @@ public class MainController {
             User currentUser = ((CurrentUser) userDetails).getUser();
             map.addAttribute("current", currentUser);
         }
-        Post post = postRepository.findOne(id);
+        Post post = postRepository.findById(id).get();
         if (post==null){
             return "redirect:/nullErrors";
         }
@@ -139,7 +139,7 @@ public class MainController {
     public String contact(ModelMap modelMap, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("current", userRepository.findOne(currentUser.getId()));
+            modelMap.addAttribute("current",  userRepository.findById(currentUser.getId()).get());
         }
         modelMap.addAttribute("allPosts", postRepository.findByUserVerify());
         modelMap.addAttribute("four", postRepository.lastFour());
@@ -151,7 +151,7 @@ public class MainController {
     public String help(ModelMap modelMap, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("current", userRepository.findOne(currentUser.getId()));
+            modelMap.addAttribute("current",  userRepository.findById(currentUser.getId()).get());
         }
         modelMap.addAttribute("allPosts", postRepository.findByUserVerify());
         modelMap.addAttribute("four", postRepository.lastFour());
@@ -164,7 +164,7 @@ public class MainController {
     public String conditions(ModelMap modelMap, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("current", userRepository.findOne(currentUser.getId()));
+            modelMap.addAttribute("current",  userRepository.findById(currentUser.getId()).get());
         }
         modelMap.addAttribute("allPosts", postRepository.findByUserVerify());
         modelMap.addAttribute("four", postRepository.lastFour());

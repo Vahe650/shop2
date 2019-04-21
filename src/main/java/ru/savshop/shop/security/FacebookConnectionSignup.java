@@ -1,13 +1,11 @@
 package ru.savshop.shop.security;
 
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Service;
-import ru.savshop.shop.controller.RegisterController;
 import ru.savshop.shop.model.Gender;
 import ru.savshop.shop.model.User;
 import ru.savshop.shop.model.UserType;
@@ -17,7 +15,7 @@ import ru.savshop.shop.repository.UserRepository;
 
 @Service
 public class FacebookConnectionSignup implements ConnectionSignUp {
- 
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -25,29 +23,25 @@ public class FacebookConnectionSignup implements ConnectionSignUp {
 
 
 
+
     @Override
     public String execute(Connection<?> connection) {
         Facebook facebook = (Facebook) connection.getApi();
-        String [] fields = { "id", "about", "age_range", "birthday", "context", "cover", "currency", "devices",
+        String [] fields = { "id", "about","address", "age_range", "birthday",  "cover", "currency", "devices",
                 "education", "email", "favorite_athletes", "favorite_teams", "first_name", "gender", "hometown",
-                "inspirational_people", "installed", "install_type", "is_verified", "languages", "last_name", "link",
-                "locale", "location", "meeting_for", "middle_name", "name", "name_format", "political", "quotes", "payment_pricepoints",
-                "relationship_status", "religion", "security_settings", "significant_other", "sports", "test_group", "timezone", "third_party_id",
+                "inspirational_people", "installed", "install_type","interested_in",  "languages", "last_name", "link",
+                "locale", "location",  "middle_name", "meeting_for", "name", "name_format", "political", "quotes",
+                "relationship_status", "religion", "security_settings", "significant_other", "sports", "test_group",  "third_party_id","timezone",
                 "updated_time", "verified",
-                "video_upload_limits", "viewer_can_send_gift", "website", "work"};
-        org.springframework.social.facebook.api.User userProfile = facebook.fetchObject("me", org.springframework.social.facebook.api.User.class, fields);
+               "viewer_can_send_gift", "website", "work"};
+        org.springframework.social.facebook.api.User userProfile = facebook.fetchObject("me", org.springframework.social.facebook.api.User.class, fields );
         User user=new User();
-        User userByEmailLike = userRepository.findUserByEmailLike(userProfile.getLastName().concat("@gmail.com"));
-        String message = "this email is already used";
-        if (userByEmailLike != null) {
-            return "redirect:/userRegister?message=" + message;
-        }
         user.setEmail(userProfile.getLastName().concat("@gmail.com"));
         user.setName(userProfile.getFirstName());
         user.setSurname(userProfile.getLastName());
         user.setPassword(new BCryptPasswordEncoder().encode(userProfile.getLastName()));
         user.setPicUrl(connection.getImageUrl());
-        user.setCountry(countryRepository.findOne(12));
+        user.setCountry(countryRepository.findById(12).get());
         user.setType(UserType.FB_USER);
         user.setGender(Gender.MALE);
         user.setVerify(true);

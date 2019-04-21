@@ -14,8 +14,7 @@ import javax.persistence.*;
 
 public class AttributeValue {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne(cascade = CascadeType.MERGE)
     private Attributes atributes;

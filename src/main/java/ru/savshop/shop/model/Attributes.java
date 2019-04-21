@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Attributes {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private int id;
     @Column(name = "name")

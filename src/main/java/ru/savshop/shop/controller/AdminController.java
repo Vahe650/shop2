@@ -117,13 +117,15 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/deleteUser")
     public String delete(@RequestParam("id") int id) {
-        userRepository.delete(id);
+        final Optional<User> byId = userRepository.findById(id);
+        byId.ifPresent(userRepository::delete);
         return "redirect:/admin/searchUser";
     }
 
     @RequestMapping(value = "/admin/deletePost")
     public String del(@RequestParam("id") int id) {
-        postRepository.delete(id);
+        final Optional<Post> byId = postRepository.findById(id);
+        byId.ifPresent(postRepository::delete);
         return "redirect:/admin/allUsers";
     }
 
@@ -131,7 +133,8 @@ public class AdminController {
     public String searchUser(ModelMap modelMap, @RequestParam(name = "search", required = false) String search, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails != null) {
             User currentUser = ((CurrentUser) userDetails).getUser();
-            modelMap.addAttribute("current", userRepository.findOne(currentUser.getId()));
+            final Optional<User> byId = userRepository.findById(currentUser.getId());
+            byId.ifPresent(user ->modelMap.addAttribute("current", user) );
         }
         modelMap.addAttribute("allPosts", postRepository.findByUserVerify());
         modelMap.addAttribute("four", postRepository.lastFour());
@@ -149,7 +152,7 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/blockUser")
     public String update(@RequestParam("id") int id) {
-        User user = userRepository.findOne(id);
+        User user = userRepository.findById(id).get();
         if (user.isVerify()) {
             user.setVerify(false);
             user.setToken("");

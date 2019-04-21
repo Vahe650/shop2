@@ -1,8 +1,5 @@
 package ru.savshop.shop.handler;
 
-import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
@@ -10,16 +7,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import javax.persistence.NonUniqueResultException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 
 
 public class CustomFailureHandler extends SimpleUrlAuthenticationFailureHandler implements AccessDeniedHandler {
@@ -32,8 +25,6 @@ public class CustomFailureHandler extends SimpleUrlAuthenticationFailureHandler 
             response.sendRedirect("/inccorectError");
         } else if (exception.getClass().isAssignableFrom(NonUniqueResultException.class)) {
             response.sendRedirect("/userUpdatePassError");
-        } else if (exception.getClass().isAssignableFrom(ResourceNotFoundException.class)) {
-            response.sendRedirect("/resource");
         }
     }
 

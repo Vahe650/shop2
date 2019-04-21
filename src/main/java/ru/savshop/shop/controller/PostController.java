@@ -54,7 +54,7 @@ public class PostController {
             User user = ((CurrentUser) userDetails).getUser();
             map.addAttribute("current", user);
         }
-        Category one = categoryRepository.findOne(id);
+        Category one = categoryRepository.findById(id).get();
         if (one == null) {
             return "redirect:/nullErrors";
         }
@@ -122,7 +122,7 @@ public class PostController {
             User user = ((CurrentUser) userDetails).getUser();
             map.addAttribute("current", user);
         }
-        Post post1 = postRepository.findOne(post.getId());
+        Post post1 = postRepository.findById(post.getId()).get();
         List<AttributeValue> allByPost = attribValueRepository.findAllByPost(post1);
         map.addAttribute("cur", post1);
         map.addAttribute("allcountry", countryRepository.findAll());
@@ -147,7 +147,7 @@ public class PostController {
             attributeValues.get(i).setAtributes(value.get(i));
             attributeValues.get(i).setPost(post);
         }
-        attribValueRepository.save(attributeValues);
+        attribValueRepository.saveAll(attributeValues);
         if (uploadingFiles.length <= 1) {
             return "redirect:/viewDetail?id=" + post.getId();
         }
@@ -176,7 +176,7 @@ public class PostController {
             User currentUser = ((CurrentUser) userDetails).getUser();
             Picture one = pictureRepository.getOne(id);
             if (one.getPost().getUser().getId() == currentUser.getId()) {
-                pictureRepository.delete(one.getId());
+                pictureRepository.delete(one);
             } else {
                 return "redirect:/accessError";
             }
