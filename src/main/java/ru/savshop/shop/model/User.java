@@ -22,13 +22,13 @@ public class User {
     @Column
     private int id;
     @Column
-    @NotEmpty(message = "Name can't be empty")
+//    @NotEmpty(message = "Name can't be empty")
     private String name;
     @Column
-    @NotEmpty(message = "Surname can't be empty")
+//    @NotEmpty(message = "Surname can't be empty")
     private String surname;
     @Column(unique=true)
-    @NotEmpty(message = "Email can't be empty")
+//    @NotEmpty(message = "Email can't be empty")
     private String email;
     @Column
     private String password;

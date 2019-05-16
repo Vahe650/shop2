@@ -119,7 +119,7 @@
 		<finalName>spring-social-login</finalName>
 		<resources>
 			<resource>
-				<directory>src\main\</directory>
+				<directory>src\main\resources\</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>
@@ -134,8 +134,8 @@
 				<version>5.0.7</version>
 				<configuration>
 					<url>jdbc:mysql://localhost:3306/shop?useSSl=false&amp;useUnicode=yes&amp;characterEncoding=utf8&amp;characterSetResults=utf8</url>
-					<user>root</user>
-					<password>root</password>
+					<user>dev</user>
+					<password>dev</password>
 				</configuration>
 				<dependencies>
 					<dependency>

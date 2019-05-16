@@ -12,7 +12,6 @@ MySQL - 5.7.18-log : Database - shop
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`shop` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
 USE `shop`;
 
@@ -85,24 +84,6 @@ insert  into `country`(`id`,`region`,`parent_id`) values (11,'Shirak',0),(12,'Gy
 
 /*Table structure for table `flyway_schema_history` */
 
-DROP TABLE IF EXISTS `flyway_schema_history`;
-
-CREATE TABLE `flyway_schema_history` (
-  `installed_rank` int(11) NOT NULL,
-  `version` varchar(50) DEFAULT NULL,
-  `description` varchar(200) NOT NULL,
-  `type` varchar(20) NOT NULL,
-  `script` varchar(1000) NOT NULL,
-  `checksum` int(11) DEFAULT NULL,
-  `installed_by` varchar(100) NOT NULL,
-  `installed_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `execution_time` int(11) NOT NULL,
-  `success` tinyint(1) NOT NULL,
-  PRIMARY KEY (`installed_rank`),
-  KEY `flyway_schema_history_s_idx` (`success`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `flyway_schema_history` */
 
 
 DROP TABLE IF EXISTS `picture`;
@@ -192,22 +173,19 @@ CREATE TABLE `user` (
 
 /*Table structure for table `userconnection` */
 
-DROP TABLE IF EXISTS `userconnection`;
-
-CREATE TABLE `userconnection` (
-  `userId` varchar(255) NOT NULL,
-  `providerId` varchar(255) NOT NULL,
-  `providerUserId` varchar(255) NOT NULL,
-  `rank` int(11) NOT NULL,
-  `displayName` varchar(255) DEFAULT NULL,
-  `profileUrl` varchar(512) DEFAULT NULL,
-  `imageUrl` varchar(512) DEFAULT NULL,
-  `accessToken` varchar(512) NOT NULL,
-  `secret` varchar(512) DEFAULT NULL,
-  `refreshToken` varchar(512) DEFAULT NULL,
-  `expireTime` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`userId`,`providerId`,`providerUserId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create table UserConnection (userId varchar(255) not null,
+	providerId varchar(255) not null,
+	providerUserId varchar(255),
+	rank int not null,
+	displayName varchar(255),
+	profileUrl varchar(512),
+	imageUrl varchar(512),
+	accessToken varchar(512) not null,
+	secret varchar(512),
+	refreshToken varchar(512),
+	expireTime bigint,
+	primary key (userId, providerId, providerUserId));
+create unique index UserConnectionRank on UserConnection(userId, providerId, rank);
 
 /*Data for the table `userconnection` */
 

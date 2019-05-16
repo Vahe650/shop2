@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "post")
+@Table(name = "post" )
 public class Post {
 
     @Id
@@ -23,10 +23,10 @@ public class Post {
     @Column
     private int id;
     @Column
-    @NotEmpty(message = "Name can't be empty")
+//    @NotEmpty(message = "Name can't be empty")
     private String title;
     @Column
-    @NotEmpty(message = "Description can't be empty")
+//    @NotEmpty(message = "Description can't be empty")
     private String description;
     @Column
     @NumberFormat
